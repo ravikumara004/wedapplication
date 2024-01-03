@@ -9,7 +9,7 @@
 </head>
 </head>
 <body>
-<h1 align="center">Sample Apllication </h1>
+<h1 align="center">Sample webApllication </h1>
 <h1 align="center"> CICD Implimented by Openshift, Tekton and Argocd tools </h1>
 <hr>
 <div style="text-align: center;">
