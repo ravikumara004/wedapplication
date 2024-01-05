@@ -20,7 +20,8 @@
 		Technologies-
 		Openshift,
 		Tekton,
-		ArgoCD
+		ArgoCD,
+                Version-1
 		<br>
 	</span>
 </div>
