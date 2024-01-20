@@ -6,7 +6,6 @@ metadata:
   labels:
     name: javawebapp
   name: javawebapp
-  namespace: pipelinens
 spec:
   type: ClusterIP
   ports:
