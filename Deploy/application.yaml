@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: javawebapp
-        image: ravikumara0004/webapp:0.0.5
+        image: ravikumara0004/webapp:0.0.4
         ports:
         - containerPort: 8080
           name: javawebapp
