@@ -21,7 +21,7 @@
 		Openshift,
 		Tekton,
 		ArgoCD,
-                Version-4
+                Version-5
 		<br>
 	</span>
 </div>
