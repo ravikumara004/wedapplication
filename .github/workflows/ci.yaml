@@ -7,6 +7,9 @@ jobs:
   manual-job:
     runs-on: ubuntu-latest
     steps:
+    - name: Checkout source repository
+      uses: actions/checkout@v2
+      
     - name: Checkout target repository
       uses: actions/checkout@v2
       with:
@@ -15,21 +18,11 @@ jobs:
         path: 'protectbranch'  # Optional: directory to checkout the repository
         ref: 'feature'  # Specify the branch name here
         #fetch-depth: 0
-
-    - name: Checkout source repository
-      uses: actions/checkout@v2
       
-    - name: Create or Update timestamp file
+    - name: print pwd and list file
       run: |
         ls 
-        cd protectbranch
-        echo "print working dir"
         pwd
-        echo "Current timestamp: $(date)" > samplefile1.txt
-        echo "list file"
-        ls
-        git --version
-        git status
   
     - name: Configure git
       run: |
