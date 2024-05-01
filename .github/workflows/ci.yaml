@@ -24,6 +24,7 @@ jobs:
         echo "Current timestamp: $(date)" > samplefile.txt
         echo "list file"
         ls
+        git --version
   
     - name: Configure git
       run: |
