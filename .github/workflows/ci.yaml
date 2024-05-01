@@ -12,7 +12,7 @@ jobs:
       with:
         repository: 'ravikumara004/protectbranch'
         submodules: 'recursive'
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.MY_TOKEN }}
         path: 'protectbranch'  # Optional: directory to checkout the repository
         ref: 'main'  # Specify the branch name here
  
