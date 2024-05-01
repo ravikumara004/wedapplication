@@ -14,7 +14,7 @@ jobs:
         submodules: 'recursive'
         token: ${{ secrets.MY_TOKEN }}
         path: 'protectbranch'  # Optional: directory to checkout the repository
-        ref: 'main'  # Specify the branch name here
+        ref: 'feature'  # Specify the branch name here
         
     - name: Create or Update timestamp file
       run: |
@@ -36,5 +36,5 @@ jobs:
         git add samplefile.txt
         git commit -m "Update timestamp"
         # The branch you want to push the changes to, adjust as necessary
-        git push origin HEAD:main
+        git push origin HEAD:feature
  
