@@ -10,7 +10,7 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
       with:
-        repository: 'github.com/ravikumara004'
+        repository: 'ravikumara004'
         token: ${{ secrets.GITHUB_TOKEN }}
         path: 'protectbranch'  # Optional: directory to checkout the repository
         ref: 'main'  # Specify the branch name here
