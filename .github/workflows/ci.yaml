@@ -23,6 +23,7 @@ jobs:
       run: |
         ls 
         pwd
+        cp *.yaml /home/runner/work/webapplication/webapplication/protectbranch/
   
     - name: Configure git
       run: |
