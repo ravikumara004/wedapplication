@@ -37,5 +37,5 @@ jobs:
         git add .
         git commit -m "Update timestamp"
         # The branch you want to push the changes to, adjust as necessary
-        git push origin HEAD:feature
+        git push origin feature
  
