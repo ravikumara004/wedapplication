@@ -38,6 +38,7 @@ jobs:
         git add .
         git commit -m "Update timestamp"
         # The branch you want to push the changes to, adjust as necessary
-        git push --set-upstream https://${{ secrets.USERNAME }}:${{ secrets.MY_TOKEN }}@github.com/ravikumara004/protectbranch.git
+        git push https://${{ secrets.USERNAME }}:${{ secrets.MY_TOKEN }}@github.com/ravikumara004/protectbranch.git HEAD:feature
+  
         #git push origin HEAD:feature
  
