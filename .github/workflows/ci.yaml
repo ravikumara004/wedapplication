@@ -20,7 +20,7 @@ jobs:
         cd protectbranch
         echo "print working dir"
         pwd
-        echo "Current timestamp: $(date)" > samplefile.txt
+        echo "Current timestamp: $(date)" > samplefile1.txt
         echo "list file"
         ls
         git --version
