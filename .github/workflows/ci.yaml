@@ -15,4 +15,20 @@ jobs:
         token: ${{ secrets.MY_TOKEN }}
         path: 'protectbranch'  # Optional: directory to checkout the repository
         ref: 'main'  # Specify the branch name here
+        
+    - name: Create or Update timestamp file
+      run: |
+        echo "Current timestamp: $(date)" > samplefile.txt
+  
+    - name: Configure git
+      run: |
+        git config --global user.email "ravikj004@gmail.com"
+        git config --global user.name "ravikumara004"
+  
+    - name: Commit and Push changes
+      run: |
+        git add samplefile.txt
+        git commit -m "Update timestamp"
+        # The branch you want to push the changes to, adjust as necessary
+        git push origin HEAD:main
  
