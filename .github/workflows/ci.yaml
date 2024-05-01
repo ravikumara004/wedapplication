@@ -33,6 +33,7 @@ jobs:
     - name: Commit and Push changes
       run: |
         #!/bin/bash
+        ls
         cd protectbranch
         git add .
           # Commit changes if there are any staged changes
