@@ -19,7 +19,11 @@ jobs:
     - name: Create or Update timestamp file
       run: |
         cd protectbranch
+        echo "print working dir"
+        pwd
         echo "Current timestamp: $(date)" > samplefile.txt
+        echo "list file"
+        ls
   
     - name: Configure git
       run: |
