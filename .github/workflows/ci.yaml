@@ -34,6 +34,7 @@ jobs:
     - name: Commit and Push changes
       run: |
         #!/bin/bash
+        cd protectbranch
         git add .
         git commit -m "Update timestamp"
         # The branch you want to push the changes to, adjust as necessary
