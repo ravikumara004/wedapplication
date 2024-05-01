@@ -14,7 +14,7 @@ jobs:
         token: ${{ secrets.MY_TOKEN }}
         path: 'protectbranch'  # Optional: directory to checkout the repository
         ref: 'feature'  # Specify the branch name here
-        fetch-depth: 0
+        #fetch-depth: 0
         
     - name: Create or Update timestamp file
       run: |
