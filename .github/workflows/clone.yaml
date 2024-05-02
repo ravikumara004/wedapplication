@@ -1,0 +1,50 @@
+name: Manual Workflow
+
+on:
+  workflow_dispatch:
+
+jobs:
+  manual-job:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout source repository
+      uses: actions/checkout@v2
+      
+    - name: Checkout target repository
+      uses: actions/checkout@v2
+      with:
+        repository: 'ravikumara004/protectbranch'
+        token: ${{ secrets.MY_TOKEN }}
+        path: 'protectbranch'  # Optional: directory to checkout the repository
+        ref: 'feature'  # Specify the branch name here
+        #fetch-depth: 0
+      
+    - name: print pwd and list file
+      run: |
+        ls 
+        pwd
+        cp *.yaml /home/runner/work/webapplication/webapplication/protectbranch/
+  
+    - name: Configure git
+      run: |
+        git config --global user.email "ravikj004@gmail.com"
+        git config --global user.name "ravikumara004"
+  
+    - name: Commit and Push changes
+      run: |
+        #!/bin/bash
+        ls
+        cd protectbranch
+        git add .
+          # Commit changes if there are any staged changes
+        git diff --staged --quiet || git commit -m "Update timestamp"
+        #git commit -m "Update timestamp"
+        # The branch you want to push the changes to, adjust as necessary
+        echo "git pull"
+        git config pull.rebase false
+        #git pull https://${{ secrets.USERNAME }}:${{ secrets.MY_TOKEN }}@github.com/ravikumara004/protectbranch.git HEAD:feature
+  
+        git push https://${{ secrets.USERNAME }}:${{ secrets.MY_TOKEN }}@github.com/ravikumara004/protectbranch.git HEAD:feature
+  
+        #git push origin HEAD:feature
+ 
