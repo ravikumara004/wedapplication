@@ -29,7 +29,6 @@ jobs:
         echo ${{ env.project }}
         ls 
         pwd
-        cp *.yaml /home/runner/work/webapplication/webapplication/protectbranch/
   
     - name: Configure git
       run: |
@@ -41,6 +40,8 @@ jobs:
         #!/bin/bash
         ls
         cd protectbranch
+        mkdir ${{ env.project }}
+        sed -e 's|<cluster>|your-cluster-name|g' -e 's|<url>|your-destination-url|g' app.yaml > ${{ env.project }}/updated_template.yaml
         git add .
           # Commit changes if there are any staged changes
         git diff --staged --quiet || git commit -m "Update timestamp"
