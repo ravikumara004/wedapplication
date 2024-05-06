@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: java-controller
+  labels:
+    name: javawebapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: javawebapp
+  template:
+    metadata:
+      labels:
+        name: javawebapp
+    spec:
+      containers:
+      - name: javawebapp
+        image: ravikumara0004/webapp:0.0.6
+        ports:
+        - containerPort: 8080
+          name: javawebapp

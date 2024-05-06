@@ -1,0 +1,24 @@
+name: Add Label to Pull Request
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  add-label:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Add Label
+        uses: actions/github-script@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const labelsToAdd = ['mylabel'];
+            const issue = context.payload.pull_request;
+            await github.issues.addLabels({
+              owner: issue.base.repo.owner.login,
+              repo: issue.base.repo.name,
+              issue_number: issue.number,
+              labels: labelsToAdd
+            });
