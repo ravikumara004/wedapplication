@@ -6,6 +6,11 @@ on:
 jobs:
   manual-job:
     runs-on: ubuntu-latest
+    env:
+      project: "project1"
+      url: "url1"
+      domain: "domain1"
+      namespace: "namespace1"
     steps:
     - name: Checkout source repository
       uses: actions/checkout@v2
@@ -21,6 +26,7 @@ jobs:
       
     - name: print pwd and list file
       run: |
+        echo ${{ env.project }}
         ls 
         pwd
         cp *.yaml /home/runner/work/webapplication/webapplication/protectbranch/
