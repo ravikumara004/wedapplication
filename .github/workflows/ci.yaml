@@ -46,7 +46,7 @@ jobs:
         else
             mkdir ${{ env.project }}
         fi
-        mkdir ${{ env.project }}
+        
         sed -e 's|<cluster>|your-cluster-name|g' -e 's|<url>|your-destination-url|g' app.yaml > ${{ env.project }}/updated_template.yaml
         git add .
           # Commit changes if there are any staged changes
