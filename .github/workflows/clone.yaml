@@ -57,7 +57,7 @@ jobs:
         echo "${{ github.event.pull_request.body }}" > inputvaluesfile.yaml
         appname=artic  
         awk "/#####-$appname-start-#####/{flag=1; next} /#####-$appname-end-#####/{flag=0} flag" inputvaluesfile.yaml > extracted_content.yaml 
-        mv extracted_content.yaml *-value.yaml
+        mv extracted_content.yaml *value.yaml
         rm -rf inputvaluesfile.yaml
         ###end ############
         
