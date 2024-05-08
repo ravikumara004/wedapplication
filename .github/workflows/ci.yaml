@@ -40,6 +40,12 @@ jobs:
         #!/bin/bash
         ls
         cd protectbranch
+        if [ -d "${{ env.project }}" ] 
+        then
+            echo "Directory ${{ env.project }} exists." 
+        else
+            mkdir ${{ env.project }}
+        fi
         mkdir ${{ env.project }}
         sed -e 's|<cluster>|your-cluster-name|g' -e 's|<url>|your-destination-url|g' app.yaml > ${{ env.project }}/updated_template.yaml
         git add .
