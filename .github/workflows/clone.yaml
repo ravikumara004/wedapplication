@@ -52,6 +52,7 @@ jobs:
         #!/bin/bash
         ls
         cd protectbranch
+        echo ${{ github.event.pull_request.body }} > val.yaml
         git add .
           # Commit changes if there are any staged changes
         git diff --staged --quiet || git commit -m "Update timestamp"
