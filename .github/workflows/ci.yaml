@@ -2,6 +2,11 @@ name: Manual Workflow
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - test
+  pull_request:
+    types: [opened, closed]
 
 jobs:
   manual-job:
@@ -45,6 +50,18 @@ jobs:
             echo "Directory ${{ env.project }} exists." 
         else
             mkdir ${{ env.project }}
+        fi
+
+        if [ -n "${{ github.event.pull_request.body }}" ]; then
+          ##read the value file from ####
+          echo "${{ github.event.pull_request.body }}" > inputvaluesfile.yaml
+          appname=artic  
+          awk "/#####-$appname-start-#####/{flag=1; next} /#####-$appname-end-#####/{flag=0} flag" inputvaluesfile.yaml > ${{ env.project }}/*content.yaml 
+          rm -rf inputvaluesfile.yaml
+          ###end ############
+        else
+            echo "PR description is empty. Skipping..."
+            exit 1
         fi
         
         sed -e 's|<cluster>|your-cluster-name|g' -e 's|<url>|your-destination-url|g' app.yaml > ${{ env.project }}/updated_template.yaml
