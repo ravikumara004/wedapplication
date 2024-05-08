@@ -25,7 +25,25 @@ jobs:
         path: 'protectbranch'  # Optional: directory to checkout the repository
         ref: 'feature'  # Specify the branch name here
         #fetch-depth: 0
-      
+        
+    - name: readr all the file and update it on PR Descriptions
+      run: |
+        #!/bin/bash
+        cd protectbranch
+        find .template/ -type f -name "*-value.yaml" | while IFS= read -r file; do
+        echo "Processing $file"
+        filename=$(basename "$file")
+        value=${filename%-value.yaml}
+        echo "#####-$value-start-#####" >> out.yaml
+        echo $value
+        cat "$file" >> out.yaml
+        echo "#####-$value-end-#####" >> out.yaml
+        done
+
+        echo "out put file"
+        cat out.yaml
+
+        
     - name: print pwd and list file
       run: |
         ls 
