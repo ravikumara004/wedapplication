@@ -54,13 +54,18 @@ jobs:
         #!/bin/bash
         ls
         cd protectbranch
-        
-        ##read the value file from ####
-        echo "${{ github.event.pull_request.body }}" > inputvaluesfile.yaml
-        appname=artic  
-        awk "/#####-$appname-start-#####/{flag=1; next} /#####-$appname-end-#####/{flag=0} flag" inputvaluesfile.yaml > ${{ env.project }}/extracted_content.yaml 
-        rm -rf inputvaluesfile.yaml
-        ###end ############
+
+        if [ -n "${{ github.event.pull_request.body }}" ]; then
+          ##read the value file from ####
+          echo "${{ github.event.pull_request.body }}" > inputvaluesfile.yaml
+          appname=artic  
+          awk "/#####-$appname-start-#####/{flag=1; next} /#####-$appname-end-#####/{flag=0} flag" inputvaluesfile.yaml > ${{ env.project }}/extracted_content.yaml 
+          rm -rf inputvaluesfile.yaml
+          ###end ############
+        else
+            echo "PR description is empty. Skipping..."
+            exit 1
+        fi
         
         git add .
           # Commit changes if there are any staged changes
