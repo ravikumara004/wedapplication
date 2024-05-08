@@ -29,7 +29,13 @@ jobs:
         cp *.yaml /home/runner/work/webapplication/webapplication/protectbranch/
         echo "============================================================"
         echo "PR Body: ${{ github.event.pull_request.body }}"
-  
+
+    - name: read pr body and update value file.
+      run: |
+        PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
+        DESCRIPTION=$(curl --silent --show-error --location --header "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER" | jq -r '.body')
+        echo "PR_NUMBER :$PR_NUMBER"
+        echo "DESCRIPTION: $DESCRIPTION"
     - name: Configure git
       run: |
         git config --global user.email "ravikj004@gmail.com"
