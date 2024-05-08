@@ -10,6 +10,7 @@ jobs:
     steps:
       - name: Check label and description
         run: |
+          echo $GITHUB_REF
           PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
           LABELS=$(curl --silent --show-error --location --header "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/labels" | jq -r '.[].name')
           DESCRIPTION=$(curl --silent --show-error --location --header "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER" | jq -r '.body')
