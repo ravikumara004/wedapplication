@@ -5,6 +5,8 @@ on:
   push:
     branches:
       - dev
+  pull_request:
+    types: [opened, closed]
 
 jobs:
   manual-job:
