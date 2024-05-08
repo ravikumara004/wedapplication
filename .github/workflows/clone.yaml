@@ -26,7 +26,7 @@ jobs:
         ref: 'feature'  # Specify the branch name here
         #fetch-depth: 0
         
-    - name: readr all the file and update it on PR Descriptions
+    - name: read all the file and update it on PR Descriptions
       run: |
         #!/bin/bash
         cd protectbranch
@@ -42,6 +42,17 @@ jobs:
 
         echo "out put file"
         cat out.yaml
+
+        #update PR Body
+        new_description=$(cat out.yaml)
+
+        # Update the pull request description using GitHub API
+        curl -X PATCH -s -H "Authorization: token ${{ secrets.MY_TOKEN }}" \
+        -H "Accept: application/vnd.github.v3+json" \
+        -d "{\"body\": \"$new_description\"}" \
+        "https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${{ github.event.pull_request.number }}"
+        
+        rm -rf out.yaml
 
         
     - name: print pwd and list file
