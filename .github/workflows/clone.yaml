@@ -11,6 +11,8 @@ on:
 jobs:
   manual-job:
     runs-on: ubuntu-latest
+    env:
+      project: "project2"
     steps:
     - name: Checkout source repository
       uses: actions/checkout@v2
@@ -56,8 +58,7 @@ jobs:
         ##read the value file from ####
         echo "${{ github.event.pull_request.body }}" > inputvaluesfile.yaml
         appname=artic  
-        awk "/#####-$appname-start-#####/{flag=1; next} /#####-$appname-end-#####/{flag=0} flag" inputvaluesfile.yaml > extracted_content.yaml 
-        cp extracted_content.yaml *value.yaml
+        awk "/#####-$appname-start-#####/{flag=1; next} /#####-$appname-end-#####/{flag=0} flag" inputvaluesfile.yaml > ${{ env.project }}/extracted_content.yaml 
         rm -rf inputvaluesfile.yaml
         ###end ############
         
