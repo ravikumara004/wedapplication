@@ -46,8 +46,8 @@ jobs:
         #update PR Body
         new_description=$(cat out.yaml)
         echo "pr number: ${{ github.event.pull_request.number }}"
-        echo "repo : ${GITHUB_REPOSITORY}"
-        echo $new_description
+        # echo "repo : ${GITHUB_REPOSITORY}"
+        # echo $new_description
 
         echo "Update the pull request description using GitHub API"
         myt="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"
