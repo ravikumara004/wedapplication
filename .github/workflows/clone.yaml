@@ -27,6 +27,8 @@ jobs:
         ls 
         pwd
         cp *.yaml /home/runner/work/webapplication/webapplication/protectbranch/
+        echo "============================================================"
+        echo "PR Body: ${{ github.event.pull_request.body }}"
   
     - name: Configure git
       run: |
