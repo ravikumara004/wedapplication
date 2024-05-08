@@ -46,12 +46,15 @@ jobs:
         #update PR Body
         new_description=$(cat out.yaml)
         echo "pr number: ${{ github.event.pull_request.number }}"
+        echo "repo : ${GITHUB_REPOSITORY}"
+        echo $new_description
 
         echo "Update the pull request description using GitHub API"
-        response=$(curl -X PATCH -s -H "Authorization: token ${{ secrets.MY_TOKEN }}" \
+        myt="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"
+        response=$(curl -X PATCH -s -H "Authorization: token $myt" \
         -H "Accept: application/vnd.github.v3+json" \
         -d "{\"body\": \"$new_description\"}" \
-        "https://api.github.com/repos/OWNER/REPO/pulls/${{ github.event.pull_request.number }}")
+        "https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${{ github.event.pull_request.number }}")
 
         echo "response : $response"
         echo "remove file"
