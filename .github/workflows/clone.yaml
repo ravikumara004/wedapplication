@@ -32,6 +32,8 @@ jobs:
 
     - name: read pr body and update value file.
       run: |
+        #!/bin/bash
+        echo $GITHUB_REF
         PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
         DESCRIPTION=$(curl --silent --show-error --location --header "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER" | jq -r '.body')
         echo "PR_NUMBER :$PR_NUMBER"
