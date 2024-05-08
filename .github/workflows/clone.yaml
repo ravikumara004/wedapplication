@@ -31,6 +31,7 @@ jobs:
         cp *.yaml /home/runner/work/webapplication/webapplication/protectbranch/
         echo "============================================================"
         echo "PR Body: ${{ github.event.pull_request.body }}"
+        echo ${{ github.event.pull_request.body }} > val.yaml
 
     - name: read pr body and update value file.
       run: |
