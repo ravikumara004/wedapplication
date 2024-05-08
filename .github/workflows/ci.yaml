@@ -7,7 +7,7 @@ jobs:
   manual-job:
     runs-on: ubuntu-latest
     env:
-      project: "project1"
+      project: "project2"
       url: "url1"
       domain: "domain1"
       namespace: "namespace1"
