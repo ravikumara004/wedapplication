@@ -34,10 +34,10 @@ jobs:
         echo "Processing $file"
         filename=$(basename "$file")
         value=${filename%-value.yaml}
-        echo "#####-$value-start-#####" >> out.yaml
+        echo "#####-file2-start-#####" >> out.yaml
         echo $value
         cat "$file" >> out.yaml
-        echo "#####-$value-end-#####" >> out.yaml
+        echo "#####-file2-end-#####" >> out.yaml
         done
 
         echo "out put file"
