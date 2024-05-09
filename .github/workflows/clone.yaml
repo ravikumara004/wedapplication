@@ -49,10 +49,6 @@ jobs:
         # echo "repo : ${GITHUB_REPOSITORY}"
         # echo $new_description
 
-
-        content=$(<out.yaml)
-        echo "OUT_YAML_CONTENT=$content" >> $GITHUB_ENV
-
         # echo "Update the pull request description using GitHub API"
         # myt="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"
         # response=$(curl -X PATCH -s -H "Authorization: token $myt" \
@@ -60,14 +56,19 @@ jobs:
         # -d "{\"body\": \"$new_description\"}" \
         # "https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${{ github.event.pull_request.number }}")
 
-        echo "response : $response"
-        echo "remove file"
+        
+    - name: Read out.yaml content
+      run: |
+        #!/bin/bash
+        cd protectbranch
+        content=$(<out.yaml)
+        echo "OUT_YAML_CONTENT=$content" >> $GITHUB_ENV  
         rm -rf out.yaml
         
     - name: Use the environment variable
       run: |
         echo $OUT_YAML_CONTENT
-        echo "pr no : ${{ github.event.number }}"
+        echo "pr no : ${{ github.event.number }}" 
         
     # - name: Update PR description
     #   run: |
