@@ -26,16 +26,22 @@ jobs:
         ref: 'feature'  # Specify the branch name here
         #fetch-depth: 0
 
-    - uses: actions/github-script@v7
-      name: update PR Body
-      with:
-        script: |
-          github.rest.pulls.update({
-            pull_number: context.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: 'thomasthornton.cloud example'
-          })
+    - name: Update Pull Request Body
+      run: |
+        PR_NUMBER=$(jq -r ".number" "$GITHUB_EVENT_PATH")
+        ACCESS_TOKEN=${{ secrets.MY_TOKEN }}
+        REPO_API_URL=$(jq -r ".repository.url" "$GITHUB_EVENT_PATH")
+        PR_URL="$REPO_API_URL/pulls/$PR_NUMBER"
+        NEW_BODY="This is the new body content for the Pull Request.\n\nYou can customize this text as needed."
+        curl -X PATCH -H "Authorization: token $ACCESS_TOKEN" \
+        -H "Accept: application/vnd.github.v3+json" \
+        "$PR_URL" \
+        -d "{\"body\": \"$NEW_BODY\"}"
+
+        echo $REPO_API_URL
+        echo $PR_URL
+        echo $PR_URL    
+        
 
     - name: read all the file and update it on PR Descriptions
       run: |
