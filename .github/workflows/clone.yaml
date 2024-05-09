@@ -67,20 +67,20 @@ jobs:
         echo $OUT_YAML_CONTENT
         echo "pr no : ${{ github.event.number }}"
         
-    - name: Update PR description
-      run: |
-        PR_NUMBER=$(jq -r ".number" "$GITHUB_EVENT_PATH")
-        ACCESS_TOKEN=$GITHUB_TOKEN
-        REPO_API_URL=$(jq -r ".repository_url" "$GITHUB_EVENT_PATH")
-        PR_URL="$REPO_API_URL/pulls/$PR_NUMBER"
-        PR_BODY=$(cat <<-EOF
-        $OUT_YAML_CONTENT
-        EOF
-        )
-        curl -X PATCH -H "Authorization: token $ACCESS_TOKEN" \
-        -H "Accept: application/vnd.github.v3+json" \
-        "$PR_URL" \
-        -d "{\"body\": \"$PR_BODY\"}"
+    # - name: Update PR description
+    #   run: |
+    #     PR_NUMBER=$(jq -r ".number" "$GITHUB_EVENT_PATH")
+    #     ACCESS_TOKEN=$GITHUB_TOKEN
+    #     REPO_API_URL=$(jq -r ".repository_url" "$GITHUB_EVENT_PATH")
+    #     PR_URL="$REPO_API_URL/pulls/$PR_NUMBER"
+    #     PR_BODY=$(cat <<-EOF
+    #     $OUT_YAML_CONTENT
+    #     EOF
+    #     )
+    #     curl -X PATCH -H "Authorization: token $ACCESS_TOKEN" \
+    #     -H "Accept: application/vnd.github.v3+json" \
+    #     "$PR_URL" \
+    #     -d "{\"body\": \"$PR_BODY\"}"
         
     - name: print pwd and list file
       run: |
