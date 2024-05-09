@@ -21,6 +21,7 @@ jobs:
 
   job2:
      runs-on: ubuntu-latest
+     if: github.event_name == 'pull_request'
      steps:
      - name: Checkout source repository
        uses: actions/checkout@v2
