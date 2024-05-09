@@ -6,7 +6,7 @@ on:
     branches:
       - dev
   pull_request:
-    types: [opened, closed, labeled]
+    types: [labeled]
 
 jobs:
   manual-job:
@@ -59,7 +59,7 @@ jobs:
         "$PR_URL" \
         -d "{\"body\": $(jq -Rs . <<< "$PRBODY")}"
         #-d "{\"body\": \"$NEW_BODY\"}"
-          
+        rm -rf out.yaml
     - name: Read out.yaml content
       run: |
         #!/bin/bash
