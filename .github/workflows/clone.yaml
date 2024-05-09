@@ -38,6 +38,7 @@ jobs:
 
   job3:
      runs-on: ubuntu-latest
+     if: github.event_name == 'pull_request' && github.event.action == 'closed'
      steps:
      - name: list repo2 file
        run: |
