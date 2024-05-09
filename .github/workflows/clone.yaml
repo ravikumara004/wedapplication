@@ -70,6 +70,18 @@ jobs:
         echo $json_content
         
         #echo "OUT_YAML_CONTENT=$json_content" >> $GITHUB_ENV
+        
+        PR_NUMBER=$(jq -r ".number" "$GITHUB_EVENT_PATH")
+        ACCESS_TOKEN=${{ secrets.MY_TOKEN }}
+        REPO_API_URL=$(jq -r ".repository.url" "$GITHUB_EVENT_PATH")
+        PR_URL="$REPO_API_URL/pulls/$PR_NUMBER"
+        PR_BODY=$json_content
+        )
+        curl -X PATCH -H "Authorization: token ${{ secrets.MY_TOKEN }}" \
+        -H "Accept: application/vnd.github.v3+json" \
+        "$PR_URL" \
+        -d "{\"body\": \"$PR_BODY\"}"
+        
 
         rm -rf out.yaml
         
