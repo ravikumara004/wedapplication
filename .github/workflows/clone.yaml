@@ -49,8 +49,9 @@ jobs:
         # echo "repo : ${GITHUB_REPOSITORY}"
         # echo $new_description
 
+
         content=$(<out.yaml)
-        echo "::set-env name=OUT_YAML_CONTENT::$content"
+        echo "OUT_YAML_CONTENT=$content" >> $GITHUB_ENV
 
         # echo "Update the pull request description using GitHub API"
         # myt="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"
@@ -62,6 +63,7 @@ jobs:
         echo "response : $response"
         echo "remove file"
         rm -rf out.yaml
+        
     - name: Use the environment variable
       run: |
         echo $OUT_YAML_CONTENT
