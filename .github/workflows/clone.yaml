@@ -25,24 +25,7 @@ jobs:
         path: 'protectbranch'  # Optional: directory to checkout the repository
         ref: 'feature'  # Specify the branch name here
         #fetch-depth: 0
-
-    - name: Update Pull Request Body
-      run: |
-        PR_NUMBER=$(jq -r ".number" "$GITHUB_EVENT_PATH")
-        ACCESS_TOKEN=${{ secrets.MY_TOKEN }}
-        REPO_API_URL=$(jq -r ".repository.url" "$GITHUB_EVENT_PATH")
-        PR_URL="$REPO_API_URL/pulls/$PR_NUMBER"
-        NEW_BODY="This is the new body content for the Pull Request.\n\nYou can customize this text as needed."
-        curl -X PATCH -H "Authorization: token $ACCESS_TOKEN" \
-        -H "Accept: application/vnd.github.v3+json" \
-        "$PR_URL" \
-        -d "{\"body\": \"$NEW_BODY\"}"
-
-        echo $REPO_API_URL
-        echo $PR_URL
-        echo $PR_URL    
         
-
     - name: read all the file and update it on PR Descriptions
       run: |
         #!/bin/bash
@@ -63,16 +46,17 @@ jobs:
         #update PR Body
         new_description=$(cat out.yaml)
         echo "pr number: ${{ github.event.pull_request.number }}"
-        # echo "repo : ${GITHUB_REPOSITORY}"
-        # echo $new_description
-
-        # echo "Update the pull request description using GitHub API"
-        # myt="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"
-        # response=$(curl -X PATCH -s -H "Authorization: token $myt" \
-        # -H "Accept: application/vnd.github.v3+json" \
-        # -d "{\"body\": \"$new_description\"}" \
-        # "https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${{ github.event.pull_request.number }}")
-
+        
+        #update PR body
+        PR_NUMBER=$(jq -r ".number" "$GITHUB_EVENT_PATH")
+        ACCESS_TOKEN=${{ secrets.MY_TOKEN }}
+        REPO_API_URL=$(jq -r ".repository.url" "$GITHUB_EVENT_PATH")
+        PR_URL="$REPO_API_URL/pulls/$PR_NUMBER"
+        NEW_BODY="This is the new body content for the Pull Request.\n\nYou can customize this text as needed."
+        curl -X PATCH -H "Authorization: token $ACCESS_TOKEN" \
+        -H "Accept: application/vnd.github.v3+json" \
+        "$PR_URL" \
+        -d "{\"body\": \"$(cat out.yaml)\"}"
         
     - name: Read out.yaml content
       run: |
