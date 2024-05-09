@@ -2,9 +2,9 @@ name: Manual Workflow
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - dev
+  # push:
+  #   branches:
+  #     - dev
   pull_request:
     types: [labeled]
 
@@ -59,7 +59,7 @@ jobs:
         "$PR_URL" \
         -d "{\"body\": $(jq -Rs . <<< "$PRBODY")}"
         #-d "{\"body\": \"$NEW_BODY\"}"
-        rm -rf out.yaml
+       
     - name: Read out.yaml content
       run: |
         #!/bin/bash
@@ -87,6 +87,7 @@ jobs:
         -H "Accept: application/vnd.github.v3+json" \
         "$PR_URL" \
         -d "{\"body\": \"$PR_BODY\"}"
+        rm -rf out.yaml
         
 
       
