@@ -57,8 +57,8 @@ jobs:
         curl -X PATCH -H "Authorization: token $ACCESS_TOKEN" \
         -H "Accept: application/vnd.github.v3+json" \
         "$PR_URL" \
-        #-d "{\"body\": \"$NEW_BODY\"}"
         -d "{\"body\": $(jq -Rs . <<< "$PRBODY")}"
+        #-d "{\"body\": \"$NEW_BODY\"}"
           
     - name: Read out.yaml content
       run: |
