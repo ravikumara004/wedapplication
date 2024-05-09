@@ -46,11 +46,12 @@ jobs:
     - name: Update Pull Request Body
       run: |
         cd protectbranch
+        
         PR_NUMBER=$(jq -r ".number" "$GITHUB_EVENT_PATH")
         ACCESS_TOKEN=${{ secrets.MY_TOKEN }}
         REPO_API_URL=$(jq -r ".repository.url" "$GITHUB_EVENT_PATH")
         PR_URL="$REPO_API_URL/pulls/$PR_NUMBER"
-        NEW_BODY="test"
+        NEW_BODY=$(cat out.yaml)
         curl -X PATCH -H "Authorization: token $ACCESS_TOKEN" \
         -H "Accept: application/vnd.github.v3+json" \
         "$PR_URL" \
@@ -85,7 +86,7 @@ jobs:
         -d "{\"body\": \"$PR_BODY\"}"
         
 
-        rm -rf out.yaml
+      
         
     - name: Use the environment variable
       run: |
