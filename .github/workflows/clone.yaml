@@ -80,7 +80,7 @@ jobs:
 
         tok=${{ secrets.MY_TOKEN }}
         
-        curl -X PATCH -H "Authorization: token $GITHUB_TOKEN" \
+        curl -X PATCH -H "Authorization: token ${{ secrets.MY_TOKEN }}" \
         -H "Accept: application/vnd.github.v3+json" \
         "$PR_URL" \
         -d "{\"body\": \"$PR_BODY\"}"
