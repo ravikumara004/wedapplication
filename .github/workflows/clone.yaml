@@ -6,7 +6,7 @@ on:
     branches:
       - dev
   pull_request:
-    types: [opened, closed]
+    types: [opened, closed, labeled]
 
 jobs:
   manual-job:
