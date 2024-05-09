@@ -43,21 +43,19 @@ jobs:
         echo "out put file"
         cat out.yaml
 
-        #update PR Body
-        new_description=$(cat out.yaml)
-        echo "pr number: ${{ github.event.pull_request.number }}"
-        
-        #update PR body
+    - name: Update Pull Request Body
+      run: |
+        cd protectbranch
         PR_NUMBER=$(jq -r ".number" "$GITHUB_EVENT_PATH")
         ACCESS_TOKEN=${{ secrets.MY_TOKEN }}
         REPO_API_URL=$(jq -r ".repository.url" "$GITHUB_EVENT_PATH")
         PR_URL="$REPO_API_URL/pulls/$PR_NUMBER"
-        NEW_BODY="This is the new body content for the Pull Request.\n\nYou can customize this text as needed."
+        NEW_BODY="test"
         curl -X PATCH -H "Authorization: token $ACCESS_TOKEN" \
         -H "Accept: application/vnd.github.v3+json" \
         "$PR_URL" \
-        -d "{\"body\": \"$(cat out.yaml)\"}"
-        
+        -d "{\"body\": \"$NEW_BODY\"}"
+          
     - name: Read out.yaml content
       run: |
         #!/bin/bash
