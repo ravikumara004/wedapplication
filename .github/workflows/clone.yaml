@@ -2,167 +2,197 @@ name: Manual Workflow
 
 on:
   workflow_dispatch:
-  # push:
-  #   branches:
-  #     - dev
+  push:
+    branches:
+      - dev-1
   pull_request:
-    types: [labeled]
+    types: [opened, reopened, labeled, closed]
 
 jobs:
-  manual-job:
-    runs-on: ubuntu-latest
-    env:
-      project: "project2"
-    steps:
-    - name: Checkout source repository
-      uses: actions/checkout@v2
-      
-    - name: Checkout target repository
-      uses: actions/checkout@v2
-      with:
+  job1:
+     runs-on: ubuntu-latest
+     steps:
+     - name: Checkout source repository
+       uses: actions/checkout@v2
+       
+     - name: list repo1 file
+       run: |
+         ls -l
+
+  job2:
+     runs-on: ubuntu-latest
+     steps:
+     - name: Checkout source repository
+       uses: actions/checkout@v2
+       with:
         repository: 'ravikumara004/protectbranch'
         token: ${{ secrets.MY_TOKEN }}
         path: 'protectbranch'  # Optional: directory to checkout the repository
         ref: 'feature'  # Specify the branch name here
-        #fetch-depth: 0
-        
-    - name: read all the file and update it on PR Descriptions
-      run: |
-        #!/bin/bash
-        cd protectbranch
-        find .template/ -type f -name "*-value.yaml" | while IFS= read -r file; do
-        echo "Processing $file"
-        filename=$(basename "$file")
-        value=${filename%-value.yaml}
-        echo "#####-file2-start-#####" >> out.yaml
-        echo $value
-        cat "$file" >> out.yaml
-        echo "#####-file2-end-#####" >> out.yaml
-        done
+          #fetch-depth: 0
 
-        echo "out put file"
-        cat out.yaml
-
-    - name: Update Pull Request Body
-      run: |
-        cd protectbranch
-        cat out.yaml
-        PRBODY=$(cat out.yaml)
-        echo $PRBODY
-        PR_NUMBER=$(jq -r ".number" "$GITHUB_EVENT_PATH")
-        ACCESS_TOKEN=${{ secrets.MY_TOKEN }}
-        REPO_API_URL=$(jq -r ".repository.url" "$GITHUB_EVENT_PATH")
-        PR_URL="$REPO_API_URL/pulls/$PR_NUMBER"
-        NEW_BODY=$PRBODY
-        curl -X PATCH -H "Authorization: token $ACCESS_TOKEN" \
-        -H "Accept: application/vnd.github.v3+json" \
-        "$PR_URL" \
-        -d "{\"body\": $(jq -Rs . <<< "$PRBODY")}"
-        #-d "{\"body\": \"$NEW_BODY\"}"
+     - name: list repo2 file
+       run: |
+         ls -l
        
-    - name: Read out.yaml content
-      run: |
-        #!/bin/bash
-        cd protectbranch
-        # content=$(<out.yaml)
-        # echo $content
-        # #echo "OUT_YAML_CONTENT=$content" >> $GITHUB_ENV  
-        yaml_content=$(cat out.yaml)
-        json_content=$(echo "$yaml_content" | yq eval '.' -o=json -)
+    
+      
 
-        echo $json_content
+# jobs:
+#   manual-job:
+#     runs-on: ubuntu-latest
+#     env:
+#       project: "project2"
+#     steps:
+#     - name: Checkout source repository
+#       uses: actions/checkout@v2
+      
+#     - name: Checkout target repository
+#       uses: actions/checkout@v2
+#       with:
+#         repository: 'ravikumara004/protectbranch'
+#         token: ${{ secrets.MY_TOKEN }}
+#         path: 'protectbranch'  # Optional: directory to checkout the repository
+#         ref: 'feature'  # Specify the branch name here
+#         #fetch-depth: 0
         
-        #echo "OUT_YAML_CONTENT=$json_content" >> $GITHUB_ENV
+#     - name: read all the file and update it on PR Descriptions
+#       run: |
+#         #!/bin/bash
+#         cd protectbranch
+#         find .template/ -type f -name "*-value.yaml" | while IFS= read -r file; do
+#         echo "Processing $file"
+#         filename=$(basename "$file")
+#         value=${filename%-value.yaml}
+#         echo "#####-file2-start-#####" >> out.yaml
+#         echo $value
+#         cat "$file" >> out.yaml
+#         echo "#####-file2-end-#####" >> out.yaml
+#         done
+
+#         echo "out put file"
+#         cat out.yaml
+
+#     - name: Update Pull Request Body
+#       run: |
+#         cd protectbranch
+#         cat out.yaml
+#         PRBODY=$(cat out.yaml)
+#         echo $PRBODY
+#         PR_NUMBER=$(jq -r ".number" "$GITHUB_EVENT_PATH")
+#         ACCESS_TOKEN=${{ secrets.MY_TOKEN }}
+#         REPO_API_URL=$(jq -r ".repository.url" "$GITHUB_EVENT_PATH")
+#         PR_URL="$REPO_API_URL/pulls/$PR_NUMBER"
+#         NEW_BODY=$PRBODY
+#         curl -X PATCH -H "Authorization: token $ACCESS_TOKEN" \
+#         -H "Accept: application/vnd.github.v3+json" \
+#         "$PR_URL" \
+#         -d "{\"body\": $(jq -Rs . <<< "$PRBODY")}"
+#         #-d "{\"body\": \"$NEW_BODY\"}"
+       
+#     - name: Read out.yaml content
+#       run: |
+#         #!/bin/bash
+#         cd protectbranch
+#         # content=$(<out.yaml)
+#         # echo $content
+#         # #echo "OUT_YAML_CONTENT=$content" >> $GITHUB_ENV  
+#         yaml_content=$(cat out.yaml)
+#         json_content=$(echo "$yaml_content" | yq eval '.' -o=json -)
+
+#         echo $json_content
         
-        PR_NUMBER=$(jq -r ".number" "$GITHUB_EVENT_PATH")
-        ACCESS_TOKEN=${{ secrets.MY_TOKEN }}
-        REPO_API_URL=$(jq -r ".repository.url" "$GITHUB_EVENT_PATH")
-        PR_URL="$REPO_API_URL/pulls/$PR_NUMBER"
-        PR_BODY=$yaml_content
+#         #echo "OUT_YAML_CONTENT=$json_content" >> $GITHUB_ENV
+        
+#         PR_NUMBER=$(jq -r ".number" "$GITHUB_EVENT_PATH")
+#         ACCESS_TOKEN=${{ secrets.MY_TOKEN }}
+#         REPO_API_URL=$(jq -r ".repository.url" "$GITHUB_EVENT_PATH")
+#         PR_URL="$REPO_API_URL/pulls/$PR_NUMBER"
+#         PR_BODY=$yaml_content
         
 
-        tok=${{ secrets.MY_TOKEN }}
+#         tok=${{ secrets.MY_TOKEN }}
         
-        curl -X PATCH -H "Authorization: token ${{ secrets.MY_TOKEN }}" \
-        -H "Accept: application/vnd.github.v3+json" \
-        "$PR_URL" \
-        -d "{\"body\": \"$PR_BODY\"}"
-        rm -rf out.yaml
+#         curl -X PATCH -H "Authorization: token ${{ secrets.MY_TOKEN }}" \
+#         -H "Accept: application/vnd.github.v3+json" \
+#         "$PR_URL" \
+#         -d "{\"body\": \"$PR_BODY\"}"
+#         rm -rf out.yaml
         
 
       
         
-    - name: Use the environment variable
-      run: |
-        echo $OUT_YAML_CONTENT
-        echo "pr no : ${{ github.event.number }}" 
+#     - name: Use the environment variable
+#       run: |
+#         echo $OUT_YAML_CONTENT
+#         echo "pr no : ${{ github.event.number }}" 
         
-    # - name: Update PR description
-    #   run: |
-    #     PR_NUMBER=$(jq -r ".number" "$GITHUB_EVENT_PATH")
-    #     ACCESS_TOKEN=$GITHUB_TOKEN
-    #     REPO_API_URL=$(jq -r ".repository_url" "$GITHUB_EVENT_PATH")
-    #     PR_URL="$REPO_API_URL/pulls/$PR_NUMBER"
-    #     PR_BODY=$(cat <<-EOF
-    #     $OUT_YAML_CONTENT
-    #     EOF
-    #     )
-    #     curl -X PATCH -H "Authorization: token $ACCESS_TOKEN" \
-    #     -H "Accept: application/vnd.github.v3+json" \
-    #     "$PR_URL" \
-    #     -d "{\"body\": \"$PR_BODY\"}"
+#     # - name: Update PR description
+#     #   run: |
+#     #     PR_NUMBER=$(jq -r ".number" "$GITHUB_EVENT_PATH")
+#     #     ACCESS_TOKEN=$GITHUB_TOKEN
+#     #     REPO_API_URL=$(jq -r ".repository_url" "$GITHUB_EVENT_PATH")
+#     #     PR_URL="$REPO_API_URL/pulls/$PR_NUMBER"
+#     #     PR_BODY=$(cat <<-EOF
+#     #     $OUT_YAML_CONTENT
+#     #     EOF
+#     #     )
+#     #     curl -X PATCH -H "Authorization: token $ACCESS_TOKEN" \
+#     #     -H "Accept: application/vnd.github.v3+json" \
+#     #     "$PR_URL" \
+#     #     -d "{\"body\": \"$PR_BODY\"}"
         
-    - name: print pwd and list file
-      run: |
-        ls 
-        pwd
-        cp *.yaml /home/runner/work/webapplication/webapplication/protectbranch/
-        echo "============================================================"
-        echo "PR Body: ${{ github.event.pull_request.body }}"
+#     - name: print pwd and list file
+#       run: |
+#         ls 
+#         pwd
+#         cp *.yaml /home/runner/work/webapplication/webapplication/protectbranch/
+#         echo "============================================================"
+#         echo "PR Body: ${{ github.event.pull_request.body }}"
        
 
-    - name: read pr body and update value file.
-      run: |
-        #!/bin/bash
-        echo $GITHUB_REF
-        PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
-        DESCRIPTION=$(curl --silent --show-error --location --header "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER" | jq -r '.body')
-        echo "PR_NUMBER :$PR_NUMBER"
-        echo "DESCRIPTION: $DESCRIPTION"
-        echo $DESCRIPTION
-    - name: Configure git
-      run: |
-        git config --global user.email "ravikj004@gmail.com"
-        git config --global user.name "ravikumara004"
+#     - name: read pr body and update value file.
+#       run: |
+#         #!/bin/bash
+#         echo $GITHUB_REF
+#         PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
+#         DESCRIPTION=$(curl --silent --show-error --location --header "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER" | jq -r '.body')
+#         echo "PR_NUMBER :$PR_NUMBER"
+#         echo "DESCRIPTION: $DESCRIPTION"
+#         echo $DESCRIPTION
+#     - name: Configure git
+#       run: |
+#         git config --global user.email "ravikj004@gmail.com"
+#         git config --global user.name "ravikumara004"
   
-    - name: Commit and Push changes
-      run: |
-        #!/bin/bash
-        ls
-        cd protectbranch
+#     - name: Commit and Push changes
+#       run: |
+#         #!/bin/bash
+#         ls
+#         cd protectbranch
 
-        if [ -n "${{ github.event.pull_request.body }}" ]; then
-          ##read the value file from ####
-          echo "${{ github.event.pull_request.body }}" > inputvaluesfile.yaml
-          appname=artic  
-          awk "/#####-file2-start-#####/{flag=1; next} /#####-file2-end-#####/{flag=0} flag" inputvaluesfile.yaml > ${{ env.project }}/extracted_content.yaml 
-          rm -rf inputvaluesfile.yaml
-          ###end ############
-        else
-            echo "PR description is empty. Skipping..."
-            exit 1
-        fi
+#         if [ -n "${{ github.event.pull_request.body }}" ]; then
+#           ##read the value file from ####
+#           echo "${{ github.event.pull_request.body }}" > inputvaluesfile.yaml
+#           appname=artic  
+#           awk "/#####-file2-start-#####/{flag=1; next} /#####-file2-end-#####/{flag=0} flag" inputvaluesfile.yaml > ${{ env.project }}/extracted_content.yaml 
+#           rm -rf inputvaluesfile.yaml
+#           ###end ############
+#         else
+#             echo "PR description is empty. Skipping..."
+#             exit 1
+#         fi
         
-        git add .
-          # Commit changes if there are any staged changes
-        git diff --staged --quiet || git commit -m "Update timestamp"
-        #git commit -m "Update timestamp"
-        # The branch you want to push the changes to, adjust as necessary
-        echo "git pull"
-        git config pull.rebase false
-        #git pull https://${{ secrets.USERNAME }}:${{ secrets.MY_TOKEN }}@github.com/ravikumara004/protectbranch.git HEAD:feature
+#         git add .
+#           # Commit changes if there are any staged changes
+#         git diff --staged --quiet || git commit -m "Update timestamp"
+#         #git commit -m "Update timestamp"
+#         # The branch you want to push the changes to, adjust as necessary
+#         echo "git pull"
+#         git config pull.rebase false
+#         #git pull https://${{ secrets.USERNAME }}:${{ secrets.MY_TOKEN }}@github.com/ravikumara004/protectbranch.git HEAD:feature
   
-        git push https://${{ secrets.USERNAME }}:${{ secrets.MY_TOKEN }}@github.com/ravikumara004/protectbranch.git HEAD:feature
+#         git push https://${{ secrets.USERNAME }}:${{ secrets.MY_TOKEN }}@github.com/ravikumara004/protectbranch.git HEAD:feature
   
-        #git push origin HEAD:feature
+#         #git push origin HEAD:feature
  
