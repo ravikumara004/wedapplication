@@ -77,7 +77,10 @@ jobs:
         PR_URL="$REPO_API_URL/pulls/$PR_NUMBER"
         PR_BODY=$json_content
         )
-        curl -X PATCH -H "Authorization: token ${{ secrets.MY_TOKEN }}" \
+
+        tok=${{ secrets.MY_TOKEN }}
+        
+        curl -X PATCH -H "Authorization: token $tok" \
         -H "Accept: application/vnd.github.v3+json" \
         "$PR_URL" \
         -d "{\"body\": \"$PR_BODY\"}"
