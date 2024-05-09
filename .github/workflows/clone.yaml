@@ -76,7 +76,7 @@ jobs:
         REPO_API_URL=$(jq -r ".repository.url" "$GITHUB_EVENT_PATH")
         PR_URL="$REPO_API_URL/pulls/$PR_NUMBER"
         PR_BODY=$json_content
-        )
+        
 
         tok=${{ secrets.MY_TOKEN }}
         
