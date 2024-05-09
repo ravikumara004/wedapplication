@@ -62,7 +62,8 @@ jobs:
         #!/bin/bash
         cd protectbranch
         content=$(<out.yaml)
-        echo "OUT_YAML_CONTENT=$content" >> $GITHUB_ENV  
+        echo $content
+        #echo "OUT_YAML_CONTENT=$content" >> $GITHUB_ENV  
         rm -rf out.yaml
         
     - name: Use the environment variable
