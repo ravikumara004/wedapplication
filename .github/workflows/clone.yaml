@@ -49,17 +49,31 @@ jobs:
         # echo "repo : ${GITHUB_REPOSITORY}"
         # echo $new_description
 
-        echo "Update the pull request description using GitHub API"
-        myt="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"
-        response=$(curl -X PATCH -s -H "Authorization: token $myt" \
-        -H "Accept: application/vnd.github.v3+json" \
-        -d "{\"body\": \"$new_description\"}" \
-        "https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${{ github.event.pull_request.number }}")
+        content=$(<out.yaml)
+        echo "::set-env name=OUT_YAML_CONTENT::$content"
+
+        # echo "Update the pull request description using GitHub API"
+        # myt="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"
+        # response=$(curl -X PATCH -s -H "Authorization: token $myt" \
+        # -H "Accept: application/vnd.github.v3+json" \
+        # -d "{\"body\": \"$new_description\"}" \
+        # "https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${{ github.event.pull_request.number }}")
 
         echo "response : $response"
         echo "remove file"
         rm -rf out.yaml
-
+    - name: Use the environment variable
+      run: |
+        echo $OUT_YAML_CONTENT
+        echo "pr no : ${{ github.event.number }}"
+        
+    - name: Update PR description
+      uses: peter-evans/update-pr-description@v2
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        pr-number: ${{ github.event.number }}
+        description: |
+          $OUT_YAML_CONTENT
         
     - name: print pwd and list file
       run: |
