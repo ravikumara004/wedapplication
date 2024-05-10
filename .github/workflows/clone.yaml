@@ -95,6 +95,8 @@ jobs:
          #!/bin/bash
          ls
          cd protectbranch
+         echo "value=========="
+         echo "${{ env.value }}"
          ##read the value file from ####
          echo "${{ github.event.pull_request.body }}" > inputvaluesfile.yaml
          appname=artic  
