@@ -1,16 +1,17 @@
 name: Manual Workflow
 
 on:
-  workflow_dispatch:
-  push:
-    branches:
-      - dev-1
+  # workflow_dispatch:
+  # push:
+  #   branches:
+  #     - dev-1
   pull_request:
-    types: [opened, reopened, labeled, closed]
+    types: [opened, labeled, closed]
 
 jobs:
   job1:
      runs-on: ubuntu-latest
+     if: github.event_name == 'pull_request'
      steps:
      - name: Checkout source repository
        uses: actions/checkout@v2
@@ -18,10 +19,12 @@ jobs:
      - name: list repo1 file
        run: |
          ls -l
+         echo "pr no : ${{ github.event.number }}"
+         echo "${{ github.event.pull_request.body }}"
 
   job2:
      runs-on: ubuntu-latest
-     if: github.event_name == 'pull_request' && github.event.action != 'closed'
+     if: github.event_name == 'pull_request' && github.event.action == 'labeled'
      steps:
      - name: Checkout source repository
        uses: actions/checkout@v2
@@ -35,14 +38,17 @@ jobs:
      - name: list repo2 file
        run: |
          ls -al protectbranch
+         echo "pr no : ${{ github.event.number }}"
+         echo "${{ github.event.pull_request.body }}"
 
   job3:
      runs-on: ubuntu-latest
      if: github.event_name == 'pull_request' && github.event.action == 'closed'
      steps:
-     - name: list repo2 file
+     - name: list repo3 file
        run: |
          ls -al
+         echo "pr no : ${{ github.event.number }}"
 
       
 
