@@ -100,7 +100,7 @@ jobs:
          ##read the value file from ####
          echo "${{ github.event.pull_request.body }}" > inputvaluesfile.yaml
          appname=artic  
-         awk "/#####-${{ env.value }}-start-#####/{flag=1; next} /#####-${{ env.value }}-end-#####/{flag=0} flag" inputvaluesfile.yaml > ${{ env.project }}/${{ env.value }}-value.yaml 
+         awk "/#####-${{ env.application }}-start-#####/{flag=1; next} /#####-${{ env.application }}-end-#####/{flag=0} flag" inputvaluesfile.yaml > ${{ env.project }}/${{ env.application }}-value.yaml 
          rm -rf inputvaluesfile.yaml
          ###end ############
          
