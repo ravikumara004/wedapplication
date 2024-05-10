@@ -13,8 +13,14 @@ jobs:
      runs-on: ubuntu-latest
      if: github.event_name == 'pull_request' && github.event.action != 'labeled' && github.event.action != 'closed'
      steps:
-     - name: Checkout source repository
+     - name: Checkout target repository
        uses: actions/checkout@v2
+       with:
+        repository: 'ravikumara004/protectbranch'
+        token: ${{ secrets.MY_TOKEN }}
+        path: 'protectbranch'  # Optional: directory to checkout the repository
+        ref: 'feature'  # Specify the branch name here
+          #fetch-depth: 0
 
      - name: read all the file and update it on PR Descriptions
        run: |
