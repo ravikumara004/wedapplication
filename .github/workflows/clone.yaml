@@ -9,7 +9,7 @@ on:
     types: [opened, labeled, closed]
 env:
   project: "project2"
-  application: "file1,file2"
+  application: "file1"
 
 jobs:
   job1:
