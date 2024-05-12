@@ -30,12 +30,22 @@ jobs:
          #!/bin/bash
          cd protectbranch
 
-         echo "#####-application-start-#####" >> out.yaml         
-         echo "namespace: default-namespace" >> out.yaml
-         echo "project: default-project" >> out.yaml
-         echo "cluster: default-cluster" >> out.yaml
-         echo "application: 'file1,file2'" >> out.yaml
-         echo "#####-application-end-#####" >> out.yaml
+         # echo "#####-application-start-#####" >> out.yaml         
+         # echo "namespace: default-namespace" >> out.yaml
+         # echo "project: default-project" >> out.yaml
+         # echo "cluster: default-cluster" >> out.yaml
+         # echo "application: 'file1,file2'" >> out.yaml
+         # echo "#####-application-end-#####" >> out.yaml
+         
+         cat << EOF >> out.yaml
+         #####-application-start-#####
+         namespace: default-namespace
+         project: default-project
+         cluster: default-cluster
+         application: 'file1,file2'
+         #####-application-end-#####
+         EOF
+
 
          
          IFS=',' read -ra files <<< "${{ env.application }}"
