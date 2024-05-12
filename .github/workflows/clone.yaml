@@ -114,6 +114,10 @@ jobs:
          ##read the value file from ####
          echo "${{ github.event.pull_request.body }}" > inputvaluesfile.yaml
          appname=artic
+
+         awk "/#####-application-start-#####/{flag=1; next} /#####-application-end-#####/{flag=0} flag" inputvaluesfile.yaml > application-temp.yaml
+         echo "application varible from PR body"
+         cat application-temp.yaml
          
          IFS=',' read -ra files <<< "${{ env.application }}"
          for app in "${files[@]}"; do
