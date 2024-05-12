@@ -9,7 +9,7 @@ on:
     types: [opened, labeled, closed]
 env:
   project: "project2"
-  application: "file1"
+  application: "file1,file2"
 
 jobs:
   job1:
@@ -34,6 +34,7 @@ jobs:
          echo "namespace: default-namespace" >> out.yaml
          echo "project: default-project" >> out.yaml
          echo "cluster: default-cluster" >> out.yaml
+         echo "application: "file1,file2" >> out.yaml
          echo "#####-application-end-#####" >> out.yaml
 
          
