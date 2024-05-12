@@ -29,6 +29,14 @@ jobs:
        run: |
          #!/bin/bash
          cd protectbranch
+
+         echo "#####-application-start-#####" >> out.yaml         
+         echo "namespace: default-namespace" >> out.yaml
+         echo "project: default-project" >> out.yaml
+         echo "cluster: default-cluster" >> out.yaml
+         echo "#####-application-end-#####" >> out.yaml
+
+         
          IFS=',' read -ra files <<< "${{ env.application }}"
          for app in "${files[@]}"; do
 
