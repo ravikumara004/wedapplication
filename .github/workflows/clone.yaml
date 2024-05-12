@@ -118,6 +118,20 @@ jobs:
          awk "/#####-application-start-#####/{flag=1; next} /#####-application-end-#####/{flag=0} flag" inputvaluesfile.yaml > application-temp.yaml
          echo "application varible from PR body"
          cat application-temp.yaml
+
+         file_path="application-temp.yaml"
+         namespace=$(grep -oP 'namespace:\s*\K\S+' "$file_path")
+         project=$(grep -oP 'project:\s*\K\S+' "$file_path")
+         cluster=$(grep -oP 'cluster:\s*\K\S+' "$file_path")
+         application=$(grep -oP 'application:\s*\K\S+' "$file_path")
+
+         # Replace the values in application.yaml
+         sed -i "s/namespace:.*/namespace: $namespace/" application.yaml
+         sed -i "s/project:.*/project: $project/" application.yaml
+         sed -i "s/cluster:.*/cluster: $cluster/" application.yaml
+         sed -i "s/application:.*/application: '$application'/" application.yaml
+         
+         
          
          IFS=',' read -ra files <<< "${{ env.application }}"
          for app in "${files[@]}"; do
