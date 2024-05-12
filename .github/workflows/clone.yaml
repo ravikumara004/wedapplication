@@ -9,7 +9,7 @@ on:
     types: [opened, labeled, closed]
 env:
   project: "project2"
-  application: "file1"
+  application: "file1,file2"
 
 jobs:
   job1:
@@ -29,15 +29,20 @@ jobs:
        run: |
          #!/bin/bash
          cd protectbranch
-         find .template/ -type f -name "*${{ env.application }}-value.yaml" | while IFS= read -r file; do
-         echo "Processing $file"
-         filename=$(basename "$file")
-         value=${filename%-value.yaml}
-         echo "#####-$value-start-#####" >> out.yaml
-         echo $value
-         echo "value=$value" >> "{{ GIHUB_OUTPUT }}"
-         cat "$file" >> out.yaml
-         echo "#####-$value-end-#####" >> out.yaml
+         IFS=',' read -ra files <<< "${{ env.application }}"
+         for app in "${files[@]}"; do
+
+           find .template/ -type f -name "$app-value.yaml" | while IFS= read -r file; do
+           echo "Processing $file"
+           filename=$(basename "$file")
+           value=${filename%-value.yaml}
+           echo "#####-$value-start-#####" >> out.yaml
+           echo $value
+           echo "value=$value" >> "{{ GIHUB_OUTPUT }}"
+           cat "$file" >> out.yaml
+           echo "#####-$value-end-#####" >> out.yaml
+           done
+
          done
 
          echo "out put file"
