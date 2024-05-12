@@ -126,10 +126,10 @@ jobs:
          application=$(grep -oP 'application:\s*\K\S+' "$file_path")
 
          # Replace the values in application.yaml
-         sed -i "s/namespace:.*/namespace: $namespace/" application.yaml
-         sed -i "s/project:.*/project: $project/" application.yaml
-         sed -i "s/cluster:.*/cluster: $cluster/" application.yaml
-         sed -i "s/application:.*/application: '$application'/" application.yaml
+         sed -i "s/namespace:.*/namespace: $namespace/" project2/application.yaml
+         sed -i "s/project:.*/project: $project/" project2/application.yaml
+         sed -i "s/cluster:.*/cluster: $cluster/" project2/application.yaml
+         sed -i "s/application:.*/application: '$application'/" project2/application.yaml
          
          
          
