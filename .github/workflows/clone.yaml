@@ -77,7 +77,7 @@ jobs:
          #cd protectbranch
          cat out.yaml
          echo "${{ github.event.pull_request.body }}" > user_comments.yaml
-         awk "/#####-User_Comments-Start-#####/{flag=1; next} /#####-User_Comments-Start-#####/{flag=0} flag"  user_comments.yaml > usercommit-temp.yaml
+         awk "/#####-User_Comments-Start-#####/{flag=1; next} /#####-User_Comments-End-#####/{flag=0} flag"  user_comments.yaml > usercommit-temp.yaml
          cat usercommit-temp.yaml out.yaml > out1.yaml
          echo "final file"
          cat out1.yaml
