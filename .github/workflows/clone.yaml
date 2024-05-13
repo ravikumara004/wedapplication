@@ -37,16 +37,17 @@ jobs:
          # echo "application: 'file1,file2'" >> out.yaml
          # echo "#####-application-end-#####" >> out.yaml
          
-         cat << EOF >> out.yaml
-         #####-application-start-#####
-         namespace: default-namespace
-         project: default-project
-         cluster: default-cluster
-         application: 'file1,file2'
-         #####-application-end-#####
-         EOF
+         # cat << EOF >> out.yaml
+         # #####-application-start-#####
+         # namespace: default-namespace
+         # project: default-project
+         # cluster: default-cluster
+         # application: 'file1,file2'
+         # #####-application-end-#####
+         # EOF
 
-
+         echo "${{ github.event.pull_request.body }}" > user_comments.yaml
+         echo user_comments.yaml
          
          IFS=',' read -ra files <<< "${{ env.application }}"
          for app in "${files[@]}"; do
