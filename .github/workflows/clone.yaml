@@ -73,10 +73,10 @@ jobs:
          cd protectbranch
          cat out.yaml
          echo "${{ github.event.pull_request.body }}" > user_comments.yaml
-         cat user_comments.yaml out.yaml > out.yaml
+         cat user_comments.yaml out.yaml > out1.yaml
          echo "final file"
-         cat out.yaml
-         PRBODY=$(cat out.yaml)
+         cat out1.yaml
+         PRBODY=$(cat out1.yaml)
          echo $PRBODY
          PR_NUMBER=$(jq -r ".number" "$GITHUB_EVENT_PATH")
          ACCESS_TOKEN=${{ secrets.MY_TOKEN }}
