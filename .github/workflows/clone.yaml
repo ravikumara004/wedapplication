@@ -71,6 +71,7 @@ jobs:
      - name: Update Pull Request Body
        run: |
          cd protectbranch
+         echo "${{ github.event.pull_request.body }}"
          cat out.yaml
          PRBODY=$(cat out.yaml)
          echo $PRBODY
