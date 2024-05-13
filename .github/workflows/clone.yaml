@@ -71,12 +71,11 @@ jobs:
      - name: Update Pull Request Body
        run: |
          cd protectbranch
-         echo "${{ github.event.pull_request.body }}" > user_comments.yaml
-         cat user_comments.yaml
          cat out.yaml
-         cat out.yaml >> user.comments.yaml
+         echo "${{ github.event.pull_request.body }}" > user_comments.yaml
+         cat user_comments.yaml out.yaml > out.yaml
          echo "final file"
-         cat user.comments.yaml
+         cat out.yaml
          PRBODY=$(cat out.yaml)
          echo $PRBODY
          PR_NUMBER=$(jq -r ".number" "$GITHUB_EVENT_PATH")
