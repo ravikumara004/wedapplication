@@ -15,6 +15,10 @@ jobs:
   job1:
      runs-on: ubuntu-latest
      if: github.event_name == 'pull_request' && github.event.action != 'labeled' && github.event.action != 'closed'
+     defaults:
+      run:
+        #shell: bash
+        working-directory: ./protectbranch
      steps:
      - name: Checkout target repository
        uses: actions/checkout@v2
@@ -28,7 +32,7 @@ jobs:
      - name: read all the file and update it on PR Descriptions
        run: |
          #!/bin/bash
-         cd protectbranch
+         #cd protectbranch
 
          # echo "#####-application-start-#####" >> out.yaml         
          # echo "namespace: default-namespace" >> out.yaml
@@ -70,7 +74,7 @@ jobs:
 
      - name: Update Pull Request Body
        run: |
-         cd protectbranch
+         #cd protectbranch
          cat out.yaml
          echo "${{ github.event.pull_request.body }}" > user_comments.yaml
          awk "/#####-User_Comments-Start-#####/{flag=1; next} /#####-User_Comments-Start-#####/{flag=0} flag"  user_comments.yaml > usercommit-temp.yaml
@@ -101,7 +105,7 @@ jobs:
      if: github.event_name == 'pull_request' && github.event.action == 'labeled'
      defaults:
       run:
-        shell: bash
+        #shell: bash
         working-directory: ./protectbranch
      steps:
      - name: Checkout target repository
