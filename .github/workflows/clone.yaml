@@ -99,6 +99,10 @@ jobs:
   job2:
      runs-on: ubuntu-latest
      if: github.event_name == 'pull_request' && github.event.action == 'labeled'
+     defaults:
+      run:
+        shell: bash
+        working-directory: ./protectbranch
      steps:
      - name: Checkout target repository
        uses: actions/checkout@v2
@@ -111,7 +115,7 @@ jobs:
 
      - name: print pt body and pr no
        run: |
-         ls -al protectbranch
+         ls -al #protectbranch
          echo "pr no : ${{ github.event.number }}"
          echo "${{ github.event.pull_request.body }}"
          
@@ -124,7 +128,7 @@ jobs:
        run: |
          #!/bin/bash
          ls
-         cd protectbranch
+         #cd protectbranch
          echo "value=========="
          echo "${{ env.value }}"
          ##read the value file from ####
