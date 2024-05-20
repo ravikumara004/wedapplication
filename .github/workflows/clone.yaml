@@ -82,37 +82,29 @@ jobs:
          awk "/##-config-val-generate-start-##/{flag=1; next} /##-config-val-generate-end-##/{flag=0} flag"  user_comments.yaml > config-as-code.txt
          input=$(cat config-as-code.txt)
 
-         # Function to convert text to YAML
-         convert_to_yaml() {
-             local input=$1
-             local yaml=""
-             local key=""
-             local value=""
-         
-             # Loop through each line of the input
-             while IFS= read -r line; do
-                 # Extract key and value
-                 key=$(echo "$line" | cut -d '=' -f 1)
-                 value=$(echo "$line" | cut -d '=' -f 2 | sed 's/"//g')
-         
-                 # Replace '.' with ':' for nested keys
-                 key=$(echo "$key" | sed 's/\./:/g')
-         
-                 # Add to YAML string
-                 yaml="$yaml$key: $value\n"
-             done <<< "$input"
-         
-             # Print YAML to stdout
-             echo -e "$yaml"
-         }
-
-         # Convert input text to YAML
-         yaml_data=$(convert_to_yaml "$input")
-
-         # Save YAML data to file
-         echo -e "$yaml_data" > config-as-code.yaml
-
-         
+         # Read the content of config-as-code.txt into a variable
+         input=$(cat config-as-code.txt)
+          
+         # Initialize an empty YAML string
+         yaml=""
+          
+         # Loop through each line of the input
+         while IFS= read -r line; do
+             # Extract key and value
+             key=$(echo "$line" | cut -d '=' -f 1)
+             value=$(echo "$line" | cut -d '=' -f 2 | sed 's/"//g')
+              
+             # Replace '.' with ':' for nested keys
+             key=$(echo "$key" | sed 's/\./:/g')
+              
+             # Add to YAML string
+             yaml="$yaml$key: $value\n"
+         done <<< "$input"
+          
+         # Save YAML data to config-as-code.yaml
+         echo -e "$yaml" > config-as-code.yaml
+          
+                   
          echo "config as code"
          cat config-as-code.txt
 
