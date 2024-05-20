@@ -80,7 +80,6 @@ jobs:
          echo "${{ github.event.pull_request.body }}" > user_comments.yaml
          awk "/#####-User_Comments-Start-#####/{flag=1; next} /#####-User_Comments-End-#####/{flag=0} flag"  user_comments.yaml > usercommit-temp.yaml
          awk "/##-config-val-generate-start-##/{flag=1; next} /##-config-val-generate-end-##/{flag=0} flag"  user_comments.yaml > config-as-code.txt
-         input=$(cat config-as-code.txt)
 
          # Read the content of config-as-code.txt into a variable
          input=$(cat config-as-code.txt)
@@ -88,22 +87,41 @@ jobs:
          # Initialize an empty YAML string
          yaml=""
           
+         # Function to convert a dot-separated key to a YAML formatted string
+         convert_key_to_yaml() {
+             local key="$1"
+             local value="$2"
+             local IFS='.'
+             read -ra keys <<< "$key"
+          
+             local yaml_part=""
+             local indent=""
+             for (( i=0; i<${#keys[@]}-1; i++ )); do
+                 yaml_part="$yaml_part$indent${keys[$i]}:\n"
+                 indent="  $indent"
+             done
+             yaml_part="$yaml_part$indent${keys[-1]}: $value"
+             echo -e "$yaml_part"
+         }
+          
          # Loop through each line of the input
          while IFS= read -r line; do
+             # Skip empty lines
+             if [ -z "$line" ]; then
+                 continue
+             fi
+          
              # Extract key and value
              key=$(echo "$line" | cut -d '=' -f 1)
              value=$(echo "$line" | cut -d '=' -f 2 | sed 's/"//g')
               
-             # Replace '.' with ':' for nested keys
-             key=$(echo "$key" | sed 's/\./:/g')
-              
-             # Add to YAML string
-             yaml="$yaml$key: $value\n"
+             # Convert key to YAML format and append to yaml variable
+             yaml="$yaml$(convert_key_to_yaml "$key" "$value")\n"
          done <<< "$input"
           
          # Save YAML data to config-as-code.yaml
          echo -e "$yaml" > config-as-code.yaml
-          
+
                    
          echo "config as code"
          cat config-as-code.txt
