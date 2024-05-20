@@ -78,6 +78,11 @@ jobs:
          cat out.yaml
          echo "${{ github.event.pull_request.body }}" > user_comments.yaml
          awk "/#####-User_Comments-Start-#####/{flag=1; next} /#####-User_Comments-End-#####/{flag=0} flag"  user_comments.yaml > usercommit-temp.yaml
+         awk "/##-config-val-generate-start-##/{flag=1; next} /##-config-val-generate-end-##/{flag=0} flag"  user_comments.yaml > config-as-code.yaml
+
+         echo "config as code"
+         cat config-as-code.yaml
+         
          cat usercommit-temp.yaml out.yaml > out1.yaml
          echo "final file"
          cat out1.yaml
