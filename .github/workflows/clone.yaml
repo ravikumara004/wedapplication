@@ -61,11 +61,11 @@ jobs:
            filename=$(basename "$file")
            value=${filename%-value.yaml}
            echo "#####-$value-start-#####" >> out.yaml
-           echo "```yaml" >> out.yaml
+           echo ""```yaml" >> out.yaml
            echo $value
            echo "value=$value" >> "{{ GIHUB_OUTPUT }}"
            cat "$file" >> out.yaml
-           echo "```" >> out.yaml
+           echo "```"" >> out.yaml
            echo "#####-$value-end-#####" >> out.yaml
            done
 
