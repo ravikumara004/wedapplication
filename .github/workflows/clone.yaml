@@ -123,9 +123,6 @@ jobs:
               fi
           done <<< "$input"
 
-          # Remove leading newline character from yaml variable
-          yaml=$(echo -e "$yaml" | sed '/^$/d')
-
           # Save YAML data to config-as-code.yaml
           echo -e "$yaml" > config-as-code.yaml
 
