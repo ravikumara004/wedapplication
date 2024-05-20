@@ -74,6 +74,7 @@ jobs:
 
      - name: Update Pull Request Body
        run: |
+         #!/bin/bash
          #cd protectbranch
          cat out.yaml
          echo "${{ github.event.pull_request.body }}" > user_comments.yaml
