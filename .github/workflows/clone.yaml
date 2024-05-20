@@ -70,6 +70,8 @@ jobs:
          done
 
          echo "out put file"
+         sed  -i '1i ```yaml' out.yaml
+         echo '```' >> out.yaml
          cat out.yaml
 
      - name: Update Pull Request Body
