@@ -178,6 +178,13 @@ jobs:
         ref: 'feature'  # Specify the branch name here
           #fetch-depth: 0
 
+     - uses: actions/download-artifact@v4.3.3
+       with:
+         name: my-artifact
+         path: ./protectbranch/project1/
+
+        
+
      - name: print pt body and pr no
        run: |
          ls -al #protectbranch
