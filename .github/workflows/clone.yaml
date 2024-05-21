@@ -160,8 +160,9 @@ jobs:
      - name: config
        run: |
          #!/bin/bash
-         config=$(cat out1.yaml)
-         echo "config=${config}" >> $GITHUB_ENV
+         configfile=config-value.yaml
+         cat out1.yaml > $configfile
+         echo "config=${configfile}" >> $GITHUB_ENV
          echo "${{ env.config }}"
 
      - uses: actions/upload-artifact@v4.3.3
