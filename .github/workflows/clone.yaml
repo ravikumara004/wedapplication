@@ -14,7 +14,6 @@ env:
 jobs:
   job1:
      runs-on: ubuntu-latest
-     id: jobid1
      if: github.event_name == 'pull_request' && github.event.action != 'labeled' && github.event.action != 'closed'
      defaults:
       run:
