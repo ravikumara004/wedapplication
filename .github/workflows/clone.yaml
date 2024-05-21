@@ -151,11 +151,11 @@ jobs:
          -d "{\"body\": $(jq -Rs . <<< "$PRBODY")}"
 
 
-     - name: generate config
-       id: generate-config
-       run: |
-         config=$(cat out1.yaml)
-         echo "config=$config" >> "$GITHUB_OUTPUT"
+     # - name: generate config
+     #   id: generate-config
+     #   run: |
+     #     config=$(cat out1.yaml)
+     #     echo "config=$config" >> "$GITHUB_OUTPUT"
 
      - uses: actions/upload-artifact@v4.3.3
        id: generate-config1
