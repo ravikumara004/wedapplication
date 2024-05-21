@@ -14,6 +14,7 @@ env:
 jobs:
   job1:
      runs-on: ubuntu-latest
+     id: jobid1
      if: github.event_name == 'pull_request' && github.event.action != 'labeled' && github.event.action != 'closed'
      defaults:
       run:
@@ -150,7 +151,15 @@ jobs:
          "$PR_URL" \
          -d "{\"body\": $(jq -Rs . <<< "$PRBODY")}"
 
+
+     - name: generate config
+       id: generate-config
+       run: |
+         config=$(cat out1.yaml)
+         echo "config=$config" >> "$GITHUB_OUTPUT"
+
      - uses: actions/upload-artifact@v4.3.3
+       id: generate-config1
        with:
          name: my-artifact
          path: ./protectbranch/out1.yaml
@@ -163,6 +172,7 @@ jobs:
 
   job2:
      runs-on: ubuntu-latest
+     needs: job1
      if: github.event_name == 'pull_request' && github.event.action == 'labeled'
      defaults:
       run:
@@ -183,7 +193,7 @@ jobs:
          name: my-artifact
          path: ./protectbranch/project1/
 
-        
+
 
      - name: print pt body and pr no
        run: |
