@@ -153,7 +153,7 @@ jobs:
      - uses: actions/upload-artifact@v4.3.3
        with:
          name: my-artifact
-         path: out1.yaml
+         path: ./protectbranch/out1.yaml
     
      - name: list repo1 file
        run: |
