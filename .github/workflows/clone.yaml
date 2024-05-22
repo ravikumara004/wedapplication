@@ -210,7 +210,8 @@ jobs:
        run: |
          ls -al #protectbranch
          echo "pr no : ${{ github.event.number }}"
-         echo "${{ github.event.pull_request.body }}"
+         echo "${{ github.event.pull_request.body }}" > input.md
+         cat input.md
          
      - name: Configure git
        run: |
