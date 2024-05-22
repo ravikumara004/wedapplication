@@ -1,7 +1,14 @@
 name: Manual Workflow
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - 'new'
+    paths:
+      - '**/new/**'
+    paths-ignore:
+      - 'new/.template/**'
+      
 
 jobs:
   manual-job:
