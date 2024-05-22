@@ -6,8 +6,8 @@ on:
       - 'new'
     paths:
       - '**/new/**'
-    paths-ignore:
-      - '**/.template/**'
+      - '!new/.template/**'
+
       
 
 jobs:
