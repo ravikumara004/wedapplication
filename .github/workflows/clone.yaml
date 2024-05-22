@@ -70,7 +70,7 @@ jobs:
            cat "$file" >> out.yaml
            echo "#####-$value-end-#####" >> out.yaml
            echo "\`\`\`" >> out.yaml
-           echo "</details" >> out.yaml
+           echo "</details>" >> out.yaml
            done
 
          done
