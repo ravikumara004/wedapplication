@@ -199,10 +199,10 @@ jobs:
         ref: 'feature'  # Specify the branch name here
           #fetch-depth: 0
 
-     - uses: actions/download-artifact@v4
-       with:
-         name: my-artifact
-         path: ./protectbranch/project1/
+     # - uses: actions/download-artifact@v4
+     #   with:
+     #     name: my-artifact
+     #     path: ./protectbranch/project1/
 
 
 
