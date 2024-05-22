@@ -63,13 +63,13 @@ jobs:
            echo "<details>" >> out.yaml
            echo "  <summary>$value</summary>" >> out.yaml
            echo "" >> out.yaml
-           echo "```yaml" >> out.yaml
+           echo "\`\`\`yaml" >> out.yaml
            echo "#####-$value-start-#####" >> out.yaml
            echo $value
            echo "value=$value" >> "{{ GIHUB_OUTPUT }}"
            cat "$file" >> out.yaml
            echo "#####-$value-end-#####" >> out.yaml
-           echo "```" >> out.yaml
+           echo "\`\`\`" >> out.yaml
            echo "</details" >> out.yaml
            done
 
