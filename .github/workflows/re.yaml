@@ -8,6 +8,10 @@ on:
       application:
         required: true
         type: string
+      github_event_pr_body:
+        required: true
+        type: string
+       
     secrets:
       token:
         required: true
@@ -32,10 +36,10 @@ jobs:
      - name: read all the file and update it on PR Descriptions
        run: |
          #!/bin/bash
-         echo "${{ github.event.pull_request.body }}" > user_comments.yaml
+         echo "${{ inputs.github_event_pr_body }}" > user_comments.yaml
          echo user_comments.yaml
          
-         IFS=',' read -ra files <<< "${{ env.application }}"
+         IFS=',' read -ra files <<< "${{ inputs.application }}"
          for app in "${files[@]}"; do
 
            find .template/ -type f -name "$app-value.yaml" | while IFS= read -r file; do
