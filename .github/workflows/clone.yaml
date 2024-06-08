@@ -13,6 +13,7 @@ jobs:
       github_event_pr_body: ${{ github.event.pull_request.body }}
       github_event_path: $GITHUB_EVENT_PATH
       pr_number: $(jq -r ".number" "$GITHUB_EVENT_PATH")
+      repo_url_path: $(jq -r ".repository.url" "$GITHUB_EVENT_PATH")
     secrets:
       token: ${{ secrets.MY_TOKEN }} # Correctly use the secret
 
