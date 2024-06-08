@@ -28,3 +28,31 @@ jobs:
         token: ${{ secrets.token }}
         path: 'protectbranch'  # Optional: directory to checkout the repository
         ref: 'feature'  # Specify the branch name here
+
+     - name: read all the file and update it on PR Descriptions
+       run: |
+         #!/bin/bash
+         echo "${{ github.event.pull_request.body }}" > user_comments.yaml
+         echo user_comments.yaml
+         
+         IFS=',' read -ra files <<< "${{ env.application }}"
+         for app in "${files[@]}"; do
+
+           find .template/ -type f -name "$app-value.yaml" | while IFS= read -r file; do
+           echo "Processing $file"
+           filename=$(basename "$file")
+           value=${filename%-value.yaml}
+           echo "<details>" >> out.yaml
+           echo "  <summary>$value</summary>" >> out.yaml
+           echo "" >> out.yaml
+           echo "\`\`\`yaml" >> out.yaml
+           echo "#####-$value-start-#####" >> out.yaml
+           echo $value
+           echo "value=$value" >> "{{ GIHUB_OUTPUT }}"
+           cat "$file" >> out.yaml
+           echo "#####-$value-end-#####" >> out.yaml
+           echo "\`\`\`" >> out.yaml
+           echo "</details>" >> out.yaml
+           done
+
+         done
