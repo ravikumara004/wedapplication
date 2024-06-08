@@ -14,7 +14,7 @@ on:
       pr_number:
         required: true
         type: string
-      github_event_path:
+      repo_url_path:
         required: true
         type: string
        
@@ -133,8 +133,8 @@ jobs:
          cat out1.yaml
          PRBODY=$(cat out1.yaml)
          echo $PRBODY
-         PR_NUMBER=$(jq -r ".number" "$GITHUB_EVENT_PATH")
-         ACCESS_TOKEN=${{ secrets.MY_TOKEN }}
+         PR_NUMBER=${{ inputs.pr_number }}
+         ACCESS_TOKEN=${{ secrets.token }}
          REPO_API_URL=$(jq -r ".repository.url" "$GITHUB_EVENT_PATH")
          PR_URL="$REPO_API_URL/pulls/$PR_NUMBER"
          NEW_BODY=$PRBODY
