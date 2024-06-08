@@ -13,7 +13,7 @@ jobs:
       with:
         project: "project2"
         application: "file1,file2"
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.MY_TOKEN }}
     
 
 
