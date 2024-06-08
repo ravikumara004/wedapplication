@@ -5,12 +5,21 @@ on:
     types: [opened, labeled, closed]
 
 jobs:
-  deploy_env:
-    uses: protectbranch/.github/workflows/reuse.yaml@main
+  call-workflow:
+    uses: ravikumara004/protectbranch/.github/workflows/reuse.yaml@main
     with:
       project: "project2"
       application: "file1,file2"
+    secrets:
       token: ${{ secrets.MY_TOKEN }}
+
+# jobs:
+#   deploy_env:
+#     uses: protectbranch/.github/workflows/reuse.yaml@main
+#     with:
+#       project: "project2"
+#       application: "file1,file2"
+#       # token: ${{ secrets.MY_TOKEN }}
     
 
 
