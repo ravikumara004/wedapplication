@@ -6,7 +6,7 @@ on:
 
 jobs:
   call-workflow:
-    uses: ravikumara004/protectbranch/.github/workflows/reuse.yaml@main
+    uses: ./.github/workflows/re.yaml
     with:
       project: "project2"
       application: "file1,file2"
