@@ -6,14 +6,11 @@ on:
 
 jobs:
   deploy_env:
-    runs-on: ubuntu-latest
-    steps: 
-    - name: update pr body and deploy env
-      uses: ravikumara004/protectbranch/.github/workflows/reuse.yaml@main
-      with:
-        project: "project2"
-        application: "file1,file2"
-        token: ${{ secrets.MY_TOKEN }}
+    uses: ravikumara004/protectbranch/.github/workflows/reuse.yaml@main
+    with:
+      project: "project2"
+      application: "file1,file2"
+      token: ${{ secrets.MY_TOKEN }}
     
 
 
