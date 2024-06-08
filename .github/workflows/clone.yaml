@@ -6,11 +6,16 @@ on:
 
 jobs:
   deploy_env:
-    uses: ravikumara004/protectbranch/.github/workflows/reuse.yaml@main
-    with:
-      project: "project2"
-      application: "file1,file2"
-    secrets: inherit
+    runs-on: ubuntu-latest
+    steps: 
+    - name: update pr body and deploy env
+      uses: ravikumara004/protectbranch/.github/workflows/reuse.yaml@main
+      with:
+        project: "project2"
+        application: "file1,file2"
+        token: ${{ secrets.GITHUB_TOKEN }}
+    
+
 
 # jobs:
 #   job1:
