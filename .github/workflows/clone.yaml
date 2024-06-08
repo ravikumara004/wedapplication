@@ -6,7 +6,7 @@ on:
 
 jobs:
   deploy_env:
-    uses: ravikumara004/protectbranch/.github/workflows/reuse.yaml@main
+    uses: protectbranch/.github/workflows/reuse.yaml@main
     with:
       project: "project2"
       application: "file1,file2"
