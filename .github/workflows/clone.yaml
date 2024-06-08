@@ -10,6 +10,7 @@ jobs:
     with:
       project: "project2"
       application: "file1,file2"
+      github_event_pr_body: ${{ github.event.pull_request.body }}
     secrets:
       token: ${{ secrets.MY_TOKEN }} # Correctly use the secret
 
