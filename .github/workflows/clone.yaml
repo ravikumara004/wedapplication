@@ -11,6 +11,8 @@ jobs:
       project: "project2"
       application: "file1,file2"
       github_event_pr_body: ${{ github.event.pull_request.body }}
+      github_event_path: $GITHUB_EVENT_PATH
+      pr_number: 56
     secrets:
       token: ${{ secrets.MY_TOKEN }} # Correctly use the secret
 
