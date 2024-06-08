@@ -1,0 +1,30 @@
+name: Deploy test evnironment
+on:
+  workflow_call:
+    inputs:
+      project:
+        required: true
+        type: string
+      application:
+        required: true
+        type: string
+    secrets:
+      token:
+        required: true
+
+jobs:
+  Updaete_PR_Body:
+     runs-on: ubuntu-latest
+     if: github.event_name == 'pull_request' && github.event.action != 'labeled' && github.event.action != 'closed'
+     defaults:
+      run:
+        #shell: bash
+        working-directory: ./protectbranch
+     steps:
+     - name: Checkout target repository
+       uses: actions/checkout@v2
+       with:
+        repository: 'ravikumara004/protectbranch'
+        token: ${{ secrets.token }}
+        path: 'protectbranch'  # Optional: directory to checkout the repository
+        ref: 'feature'  # Specify the branch name here
