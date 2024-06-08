@@ -1,15 +1,8 @@
 name: Manual Workflow
 
 on:
-  # workflow_dispatch:
-  # push:
-  #   branches:
-  #     - dev-1
   pull_request:
     types: [opened, labeled, closed]
-env:
-  project: "project2"
-  application: "file1,file2"
 
 jobs:
   deploy_env:
