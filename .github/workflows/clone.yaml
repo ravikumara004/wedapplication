@@ -12,7 +12,7 @@ jobs:
       application: "file1,file2"
       github_event_pr_body: ${{ github.event.pull_request.body }}
       github_event_path: $GITHUB_EVENT_PATH
-      pr_number: 56
+      pr_number: $(jq -r ".number" "$GITHUB_EVENT_PATH")
     secrets:
       token: ${{ secrets.MY_TOKEN }} # Correctly use the secret
 
