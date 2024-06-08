@@ -11,7 +11,8 @@ jobs:
       project: "project2"
       application: "file1,file2"
     secrets:
-      token: ${{ secrets.MY_TOKEN }}
+      token: ${{ secrets.MY_TOKEN }} # Correctly use the secret
+
 
 # jobs:
 #   deploy_env:
