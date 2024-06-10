@@ -11,12 +11,12 @@ on:
       github_event_pr_body:
         required: true
         type: string
-      pr_number:
-        required: true
-        type: string
-      repo_url_path:
-        required: true
-        type: string
+      # pr_number:
+      #   required: true
+      #   type: string
+      # repo_url_path:
+      #   required: true
+      #   type: string
        
     secrets:
       token:
