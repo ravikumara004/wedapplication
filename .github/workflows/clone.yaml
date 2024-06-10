@@ -4,12 +4,16 @@ on:
   pull_request:
     types: [opened, labeled, closed]
 
+env:
+  project: "project2"
+  application: "file1,file2"
+
 jobs:
   call-workflow:
     uses: ./.github/workflows/re.yaml #ravikumara004/protectbranch/.github/workflows/renew.yaml@v1.0.0    #./.github/workflows/re.yaml
     with:
-      project: "project2"
-      application: "file1,file2"
+      project: ${{ env.project }}
+      application: ${{ env.application }}
       github_event_pr_body: ${{ github.event.pull_request.body }}
     secrets:
       token: ${{ secrets.MY_TOKEN }} # Correctly use the secret
