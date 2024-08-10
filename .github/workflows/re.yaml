@@ -1,0 +1,144 @@
+name: Deploy test evnironment
+on:
+  workflow_call:
+    inputs:
+      project:
+        required: true
+        type: string
+      application:
+        required: true
+        type: string
+      github_event_pr_body:
+        required: true
+        type: string
+      # pr_number:
+      #   required: true
+      #   type: string
+      # repo_url_path:
+      #   required: true
+      #   type: string
+       
+    secrets:
+      token:
+        required: true
+
+jobs:
+  Updaete_PR_Body:
+     runs-on: ubuntu-latest
+     if: github.event_name == 'pull_request' && github.event.action != 'labeled' && github.event.action != 'closed'
+     defaults:
+      run:
+        #shell: bash
+        working-directory: ./protectbranch
+     steps:
+     - name: Checkout target repository
+       uses: actions/checkout@v2
+       with:
+        repository: 'ravikumara004/protectbranch'
+        token: ${{ secrets.token }}
+        path: 'protectbranch'  # Optional: directory to checkout the repository
+        ref: 'feature'  # Specify the branch name here
+
+     - name: read all the file and update it on PR Descriptions
+       run: |
+         #!/bin/bash
+         echo "${{ inputs.github_event_pr_body }}" > user_comments.yaml
+         cat user_comments.yaml
+         
+         IFS=',' read -ra files <<< "${{ inputs.application }}"
+         for app in "${files[@]}"; do
+
+           find .template/ -type f -name "$app-value.yaml" | while IFS= read -r file; do
+           echo "Processing $file"
+           filename=$(basename "$file")
+           value=${filename%-value.yaml}
+           echo "<details>" >> out.yaml
+           echo "  <summary>$value</summary>" >> out.yaml
+           echo "" >> out.yaml
+           echo "\`\`\`yaml" >> out.yaml
+           echo "#####-$value-start-#####" >> out.yaml
+           echo $value
+           echo "value=$value" >> "{{ GIHUB_OUTPUT }}"
+           cat "$file" >> out.yaml
+           echo "#####-$value-end-#####" >> out.yaml
+           echo "\`\`\`" >> out.yaml
+           echo "</details>" >> out.yaml
+           done
+
+         done
+
+     - name: Update Pull Request Body
+       run: |
+         #!/bin/bash
+         #cd protectbranch
+         cat out.yaml
+         echo "${{ inputs.github_event_pr_body }}" > user_comments.yaml
+         awk "/#####-User_Comments-Start-#####/{flag=1; next} /#####-User_Comments-End-#####/{flag=0} flag"  user_comments.yaml > usercommit-temp.yaml
+         awk "/##-config-val-generate-start-##/{flag=1; next} /##-config-val-generate-end-##/{flag=0} flag"  user_comments.yaml > config-as-code.txt
+          
+          # Read the content of config-as-code.txt into a variable
+          input=$(cat config-as-code.txt)
+          
+          # Initialize an empty YAML string
+          yaml=""
+          
+          # Function to convert a dot-separated key to a YAML formatted string
+          convert_key_to_yaml() {
+              local key="$1"
+              local value="$2"
+              local IFS='.'
+              read -ra keys <<< "$key"
+          
+              local yaml_part=""
+              local indent=""
+              for (( i=0; i<${#keys[@]}-1; i++ )); do
+                  yaml_part="$yaml_part$indent${keys[$i]}:\n"
+                  indent="  $indent"
+              done
+              yaml_part="$yaml_part$indent${keys[-1]}: $value"
+              echo -e "$yaml_part"
+          }
+          
+          # Loop through each line of the input
+          while IFS= read -r line; do
+              # Skip empty lines
+              if [ -z "$line" ]; then
+                  continue
+              fi
+          
+              # Extract key and value
+              key=$(echo "$line" | cut -d '=' -f 1)
+              value=$(echo "$line" | cut -d '=' -f 2 | sed 's/"//g')
+              
+              # Convert key to YAML format and append to yaml variable
+              if [ -n "$yaml" ]; then
+                  yaml="$yaml\n$(convert_key_to_yaml "$key" "$value")"
+              else
+                  yaml="$(convert_key_to_yaml "$key" "$value")"
+              fi
+          done <<< "$input"
+
+          # Save YAML data to config-as-code.yaml
+          echo -e "$yaml" > config-as-code.yaml
+
+
+                   
+         echo "config as code"
+         cat config-as-code.txt
+
+         cat config-as-code.yaml
+         
+         cat usercommit-temp.yaml out.yaml > out1.yaml
+         echo "final file"
+         cat out1.yaml
+         PRBODY=$(cat out1.yaml)
+         echo $PRBODY
+         PR_NUMBER=$(jq -r ".number" "$GITHUB_EVENT_PATH")
+         ACCESS_TOKEN=${{ secrets.token }}
+         REPO_API_URL=$(jq -r ".repository.url" "$GITHUB_EVENT_PATH")
+         PR_URL="$REPO_API_URL/pulls/$PR_NUMBER"
+         NEW_BODY=$PRBODY
+         curl -X PATCH -H "Authorization: token $ACCESS_TOKEN" \
+         -H "Accept: application/vnd.github.v3+json" \
+         "$PR_URL" \
+         -d "{\"body\": $(jq -Rs . <<< "$PRBODY")}"

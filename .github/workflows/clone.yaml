@@ -1,0 +1,430 @@
+name: Manual Workflow
+
+on:
+  pull_request:
+    types: [opened, labeled, closed]
+
+env:
+  project1: "project2"
+  application1: "file1,file2"
+
+jobs:
+  call-workflow:
+    uses: ./.github/workflows/re.yaml #ravikumara004/protectbranch/.github/workflows/renew.yaml@v1.0.0    #./.github/workflows/re.yaml
+    with:
+      project: ${{ env.project1 }}
+      application: ${{ env.application1 }}
+      github_event_pr_body: ${{ github.event.pull_request.body }}
+    secrets:
+      token: ${{ secrets.MY_TOKEN }} # Correctly use the secret
+
+
+
+# jobs:
+#   job1:
+#      runs-on: ubuntu-latest
+#      if: github.event_name == 'pull_request' && github.event.action != 'labeled' && github.event.action != 'closed'
+#      defaults:
+#       run:
+#         #shell: bash
+#         working-directory: ./protectbranch
+#      steps:
+#      - name: Checkout target repository
+#        uses: actions/checkout@v2
+#        with:
+#         repository: 'ravikumara004/protectbranch'
+#         token: ${{ secrets.MY_TOKEN }}
+#         path: 'protectbranch'  # Optional: directory to checkout the repository
+#         ref: 'feature'  # Specify the branch name here
+#           #fetch-depth: 0
+
+#      - name: read all the file and update it on PR Descriptions
+#        run: |
+#          #!/bin/bash
+#          echo "${{ github.event.pull_request.body }}" > user_comments.yaml
+#          echo user_comments.yaml
+         
+#          IFS=',' read -ra files <<< "${{ env.application }}"
+#          for app in "${files[@]}"; do
+
+#            find .template/ -type f -name "$app-value.yaml" | while IFS= read -r file; do
+#            echo "Processing $file"
+#            filename=$(basename "$file")
+#            value=${filename%-value.yaml}
+#            echo "<details>" >> out.yaml
+#            echo "  <summary>$value</summary>" >> out.yaml
+#            echo "" >> out.yaml
+#            echo "\`\`\`yaml" >> out.yaml
+#            echo "#####-$value-start-#####" >> out.yaml
+#            echo $value
+#            echo "value=$value" >> "{{ GIHUB_OUTPUT }}"
+#            cat "$file" >> out.yaml
+#            echo "#####-$value-end-#####" >> out.yaml
+#            echo "\`\`\`" >> out.yaml
+#            echo "</details>" >> out.yaml
+#            done
+
+#          done
+
+#          # echo "out put file"
+#          # sed  -i '1i ```yaml' out.yaml
+#          # echo '```' >> out.yaml
+#          # cat out.yaml
+
+#      - name: Update Pull Request Body
+#        run: |
+#          #!/bin/bash
+#          #cd protectbranch
+#          cat out.yaml
+#          echo "${{ github.event.pull_request.body }}" > user_comments.yaml
+#          awk "/#####-User_Comments-Start-#####/{flag=1; next} /#####-User_Comments-End-#####/{flag=0} flag"  user_comments.yaml > usercommit-temp.yaml
+#          awk "/##-config-val-generate-start-##/{flag=1; next} /##-config-val-generate-end-##/{flag=0} flag"  user_comments.yaml > config-as-code.txt
+          
+#           # Read the content of config-as-code.txt into a variable
+#           input=$(cat config-as-code.txt)
+          
+#           # Initialize an empty YAML string
+#           yaml=""
+          
+#           # Function to convert a dot-separated key to a YAML formatted string
+#           convert_key_to_yaml() {
+#               local key="$1"
+#               local value="$2"
+#               local IFS='.'
+#               read -ra keys <<< "$key"
+          
+#               local yaml_part=""
+#               local indent=""
+#               for (( i=0; i<${#keys[@]}-1; i++ )); do
+#                   yaml_part="$yaml_part$indent${keys[$i]}:\n"
+#                   indent="  $indent"
+#               done
+#               yaml_part="$yaml_part$indent${keys[-1]}: $value"
+#               echo -e "$yaml_part"
+#           }
+          
+#           # Loop through each line of the input
+#           while IFS= read -r line; do
+#               # Skip empty lines
+#               if [ -z "$line" ]; then
+#                   continue
+#               fi
+          
+#               # Extract key and value
+#               key=$(echo "$line" | cut -d '=' -f 1)
+#               value=$(echo "$line" | cut -d '=' -f 2 | sed 's/"//g')
+              
+#               # Convert key to YAML format and append to yaml variable
+#               if [ -n "$yaml" ]; then
+#                   yaml="$yaml\n$(convert_key_to_yaml "$key" "$value")"
+#               else
+#                   yaml="$(convert_key_to_yaml "$key" "$value")"
+#               fi
+#           done <<< "$input"
+
+#           # Save YAML data to config-as-code.yaml
+#           echo -e "$yaml" > config-as-code.yaml
+
+
+                   
+#          echo "config as code"
+#          cat config-as-code.txt
+
+#          cat config-as-code.yaml
+         
+#          cat usercommit-temp.yaml out.yaml > out1.yaml
+#          echo "final file"
+#          cat out1.yaml
+#          PRBODY=$(cat out1.yaml)
+#          echo $PRBODY
+#          PR_NUMBER=$(jq -r ".number" "$GITHUB_EVENT_PATH")
+#          ACCESS_TOKEN=${{ secrets.MY_TOKEN }}
+#          REPO_API_URL=$(jq -r ".repository.url" "$GITHUB_EVENT_PATH")
+#          PR_URL="$REPO_API_URL/pulls/$PR_NUMBER"
+#          NEW_BODY=$PRBODY
+#          curl -X PATCH -H "Authorization: token $ACCESS_TOKEN" \
+#          -H "Accept: application/vnd.github.v3+json" \
+#          "$PR_URL" \
+#          -d "{\"body\": $(jq -Rs . <<< "$PRBODY")}"
+
+
+#      # - name: generate config
+#      #   id: generate-config
+#      #   run: |
+#      #     config=$(cat out1.yaml)
+#      #     echo "config=$config" >> "$GITHUB_OUTPUT"
+
+#      - name: config
+#        run: |
+#          #!/bin/bash
+#          configfile=config-value.yaml
+#          cat out1.yaml > $configfile
+#          echo "config=${configfile}" >> "$GITHUB_ENV"
+#          echo "${{ env.config }}"
+
+#      - uses: actions/upload-artifact@v4.3.3
+#        with:
+#          name: my-artifact
+#          path: ./protectbranch/out1.yaml
+    
+#      - name: list repo1 file
+#        run: |
+#          ls -l
+#          echo "pr no : ${{ github.event.number }}"
+#          echo "${{ github.event.pull_request.body }}"
+
+#   job2:
+#      runs-on: ubuntu-latest
+#      if: github.event_name == 'pull_request' && github.event.action == 'labeled'
+#      defaults:
+#       run:
+#         #shell: bash
+#         working-directory: ./protectbranch
+#      steps:
+#      - name: Checkout target repository
+#        uses: actions/checkout@v2
+#        with:
+#         repository: 'ravikumara004/protectbranch'
+#         token: ${{ secrets.MY_TOKEN }}
+#         path: 'protectbranch'  # Optional: directory to checkout the repository
+#         ref: 'feature'  # Specify the branch name here
+#           #fetch-depth: 0
+
+#      # - uses: actions/download-artifact@v4
+#      #   with:
+#      #     name: my-artifact
+#      #     path: ./protectbranch/project1/
+
+
+
+#      - name: print pt body and pr no
+#        run: |
+#          ls -al #protectbranch
+#          echo "pr no : ${{ github.event.number }}"
+#          echo "${{ github.event.pull_request.body }}" > input.md
+#          cat input.md
+         
+#      - name: Configure git
+#        run: |
+#          git config --global user.email "ravikj004@gmail.com"
+#          git config --global user.name "ravikumara004"
+  
+#      - name: update value file and push to repo
+#        run: |
+#          #!/bin/bash
+#          ls
+#          #cd protectbranch
+#          echo "value=========="
+#          echo "${{ env.value }}"
+#          ##read the value file from ####
+#          echo "${{ github.event.pull_request.body }}" > inputvaluesfile.yaml
+#          appname=artic
+
+#          # awk "/#####-application-start-#####/{flag=1; next} /#####-application-end-#####/{flag=0} flag" inputvaluesfile.yaml > application-temp.yaml
+#          # echo "application varible from PR body"
+#          # cat application-temp.yaml
+
+#          # file_path="application-temp.yaml"
+#          # namespace=$(grep -oP 'namespace:\s*\K\S+' "$file_path")
+#          # project=$(grep -oP 'project:\s*\K\S+' "$file_path")
+#          # cluster=$(grep -oP 'cluster:\s*\K\S+' "$file_path")
+#          # application=$(grep -oP 'application:\s*\K\S+' "$file_path")
+
+#          # # Replace the values in application.yaml
+#          # sed -i "s/namespace:.*/namespace: $namespace/" project2/application.yaml
+#          # sed -i "s/project:.*/project: $project/" project2/application.yaml
+#          # sed -i "s/cluster:.*/cluster: $cluster/" project2/application.yaml
+#          # sed -i "s/application:.*/application: '$application'/" project2/application.yaml
+         
+         
+         
+#          IFS=',' read -ra files <<< "${{ env.application }}"
+#          for app in "${files[@]}"; do
+#            awk "/#####-$app-start-#####/{flag=1; next} /#####-$app-end-#####/{flag=0} flag" inputvaluesfile.yaml > ${{ env.project }}/$app-value.yaml 
+#          done
+#          rm -rf inputvaluesfile.yaml
+#          ###end ############
+         
+#          git add .
+#            # Commit changes if there are any staged changes
+#          git diff --staged --quiet || git commit -m "Update timestamp"
+#          #git commit -m "Update timestamp"
+#          # The branch you want to push the changes to, adjust as necessary
+#          echo "git pull"
+#          git config pull.rebase false
+#          #git pull https://${{ secrets.USERNAME }}:${{ secrets.MY_TOKEN }}@github.com/ravikumara004/protectbranch.git HEAD:feature
+  
+#          git push https://${{ secrets.USERNAME }}:${{ secrets.MY_TOKEN }}@github.com/ravikumara004/protectbranch.git HEAD:feature
+  
+#          #git push origin HEAD:feature
+ 
+
+  # job3:
+  #    runs-on: ubuntu-latest
+  #    if: github.event_name == 'pull_request' && github.event.action == 'closed'
+  #    steps:
+  #    - name: list repo3 file
+  #      run: |
+  #        ls -al
+  #        echo "pr no : ${{ github.event.number }}"
+
+      
+
+# jobs:
+#   manual-job:
+#     runs-on: ubuntu-latest
+#     env:
+#       project: "project2"
+#     steps:
+#     - name: Checkout source repository
+#       uses: actions/checkout@v2
+      
+#     - name: Checkout target repository
+#       uses: actions/checkout@v2
+#       with:
+#         repository: 'ravikumara004/protectbranch'
+#         token: ${{ secrets.MY_TOKEN }}
+#         path: 'protectbranch'  # Optional: directory to checkout the repository
+#         ref: 'feature'  # Specify the branch name here
+#         #fetch-depth: 0
+        
+#     - name: read all the file and update it on PR Descriptions
+#       run: |
+#         #!/bin/bash
+#         cd protectbranch
+#         find .template/ -type f -name "*-value.yaml" | while IFS= read -r file; do
+#         echo "Processing $file"
+#         filename=$(basename "$file")
+#         value=${filename%-value.yaml}
+#         echo "#####-file2-start-#####" >> out.yaml
+#         echo $value
+#         cat "$file" >> out.yaml
+#         echo "#####-file2-end-#####" >> out.yaml
+#         done
+
+#         echo "out put file"
+#         cat out.yaml
+
+#     - name: Update Pull Request Body
+#       run: |
+#         cd protectbranch
+#         cat out.yaml
+#         PRBODY=$(cat out.yaml)
+#         echo $PRBODY
+#         PR_NUMBER=$(jq -r ".number" "$GITHUB_EVENT_PATH")
+#         ACCESS_TOKEN=${{ secrets.MY_TOKEN }}
+#         REPO_API_URL=$(jq -r ".repository.url" "$GITHUB_EVENT_PATH")
+#         PR_URL="$REPO_API_URL/pulls/$PR_NUMBER"
+#         NEW_BODY=$PRBODY
+#         curl -X PATCH -H "Authorization: token $ACCESS_TOKEN" \
+#         -H "Accept: application/vnd.github.v3+json" \
+#         "$PR_URL" \
+#         -d "{\"body\": $(jq -Rs . <<< "$PRBODY")}"
+#         #-d "{\"body\": \"$NEW_BODY\"}"
+       
+#     - name: Read out.yaml content
+#       run: |
+#         #!/bin/bash
+#         cd protectbranch
+#         # content=$(<out.yaml)
+#         # echo $content
+#         # #echo "OUT_YAML_CONTENT=$content" >> $GITHUB_ENV  
+#         yaml_content=$(cat out.yaml)
+#         json_content=$(echo "$yaml_content" | yq eval '.' -o=json -)
+
+#         echo $json_content
+        
+#         #echo "OUT_YAML_CONTENT=$json_content" >> $GITHUB_ENV
+        
+#         PR_NUMBER=$(jq -r ".number" "$GITHUB_EVENT_PATH")
+#         ACCESS_TOKEN=${{ secrets.MY_TOKEN }}
+#         REPO_API_URL=$(jq -r ".repository.url" "$GITHUB_EVENT_PATH")
+#         PR_URL="$REPO_API_URL/pulls/$PR_NUMBER"
+#         PR_BODY=$yaml_content
+        
+
+#         tok=${{ secrets.MY_TOKEN }}
+        
+#         curl -X PATCH -H "Authorization: token ${{ secrets.MY_TOKEN }}" \
+#         -H "Accept: application/vnd.github.v3+json" \
+#         "$PR_URL" \
+#         -d "{\"body\": \"$PR_BODY\"}"
+#         rm -rf out.yaml
+        
+
+      
+        
+#     - name: Use the environment variable
+#       run: |
+#         echo $OUT_YAML_CONTENT
+#         echo "pr no : ${{ github.event.number }}" 
+        
+#     # - name: Update PR description
+#     #   run: |
+#     #     PR_NUMBER=$(jq -r ".number" "$GITHUB_EVENT_PATH")
+#     #     ACCESS_TOKEN=$GITHUB_TOKEN
+#     #     REPO_API_URL=$(jq -r ".repository_url" "$GITHUB_EVENT_PATH")
+#     #     PR_URL="$REPO_API_URL/pulls/$PR_NUMBER"
+#     #     PR_BODY=$(cat <<-EOF
+#     #     $OUT_YAML_CONTENT
+#     #     EOF
+#     #     )
+#     #     curl -X PATCH -H "Authorization: token $ACCESS_TOKEN" \
+#     #     -H "Accept: application/vnd.github.v3+json" \
+#     #     "$PR_URL" \
+#     #     -d "{\"body\": \"$PR_BODY\"}"
+        
+#     - name: print pwd and list file
+#       run: |
+#         ls 
+#         pwd
+#         cp *.yaml /home/runner/work/webapplication/webapplication/protectbranch/
+#         echo "============================================================"
+#         echo "PR Body: ${{ github.event.pull_request.body }}"
+       
+
+#     - name: read pr body and update value file.
+#       run: |
+#         #!/bin/bash
+#         echo $GITHUB_REF
+#         PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
+#         DESCRIPTION=$(curl --silent --show-error --location --header "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER" | jq -r '.body')
+#         echo "PR_NUMBER :$PR_NUMBER"
+#         echo "DESCRIPTION: $DESCRIPTION"
+#         echo $DESCRIPTION
+#     - name: Configure git
+#       run: |
+#         git config --global user.email "ravikj004@gmail.com"
+#         git config --global user.name "ravikumara004"
+  
+#     - name: Commit and Push changes
+#       run: |
+#         #!/bin/bash
+#         ls
+#         cd protectbranch
+
+#         if [ -n "${{ github.event.pull_request.body }}" ]; then
+#           ##read the value file from ####
+#           echo "${{ github.event.pull_request.body }}" > inputvaluesfile.yaml
+#           appname=artic  
+#           awk "/#####-file2-start-#####/{flag=1; next} /#####-file2-end-#####/{flag=0} flag" inputvaluesfile.yaml > ${{ env.project }}/extracted_content.yaml 
+#           rm -rf inputvaluesfile.yaml
+#           ###end ############
+#         else
+#             echo "PR description is empty. Skipping..."
+#             exit 1
+#         fi
+        
+#         git add .
+#           # Commit changes if there are any staged changes
+#         git diff --staged --quiet || git commit -m "Update timestamp"
+#         #git commit -m "Update timestamp"
+#         # The branch you want to push the changes to, adjust as necessary
+#         echo "git pull"
+#         git config pull.rebase false
+#         #git pull https://${{ secrets.USERNAME }}:${{ secrets.MY_TOKEN }}@github.com/ravikumara004/protectbranch.git HEAD:feature
+  
+#         git push https://${{ secrets.USERNAME }}:${{ secrets.MY_TOKEN }}@github.com/ravikumara004/protectbranch.git HEAD:feature
+  
+#         #git push origin HEAD:feature
+ 

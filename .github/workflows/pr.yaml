@@ -1,24 +1,44 @@
-name: Add Label to Pull Request
+# name: PR Check
 
-on:
-  pull_request:
-    types: [opened]
+# on:
+#   pull_request:
+#     types: [opened, closed]
+    
+# jobs:
+#   check:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Check label and description
+#         run: |
+#           echo $GITHUB_REF
+#           PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
+#           LABELS=$(curl --silent --show-error --location --header "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/labels" | jq -r '.[].name')
+#           DESCRIPTION=$(curl --silent --show-error --location --header "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER" | jq -r '.body')
+#           if [[ $LABELS =~ "Sanity Testing" ]] && [[ -n $DESCRIPTION ]]; then
+#             echo "Checks passed - contains both label and PR Body"
+#           else
+#             echo "Checks failed - doesn't contain either label or PR body"
+#             exit 1
+#           fi
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-jobs:
-  add-label:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Add Label
-        uses: actions/github-script@v4
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const labelsToAdd = ['mylabel'];
-            const issue = context.payload.pull_request;
-            await github.issues.addLabels({
-              owner: issue.base.repo.owner.login,
-              repo: issue.base.repo.name,
-              issue_number: issue.number,
-              labels: labelsToAdd
-            });
+#       - name: Check PR Body Content
+#         id: pr_body_check
+#         run: |
+#           PR_BODY=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+#             "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}" \
+#             | jq -r '.body')
+        
+#           found_all=true
+#           for value in "envname" "namespace"; do
+#           if [[ ! $PR_BODY =~ $value ]]; then
+#             echo "Value '$value' not found in PR body. Failing workflow."
+#             found_all=false
+#             exit 1
+#           fi
+#           done
+        
+#           if [ "$found_all" = true ]; then
+#           echo "All desired values found in PR body."
+#           fi
